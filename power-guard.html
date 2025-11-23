@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M0NARQ | PowerGuard</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <style>
+        /* FONT MAPPING */
+        @font-face {
+            font-family: 'Sweet Sans Pro';
+            src: url('assets/fonts/SweetSansPro-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Sweet Sans Pro';
+            src: url('assets/fonts/SweetSansPro-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        /* TECHNICAL STYLING overrides */
+        :root {
+            --font-tech: 'Sweet Sans Pro', 'FK Roman', sans-serif;
+            --color-code-bg: #0b121b;
+            --color-accent-pg: #FF6B1C; /* Safety Orange for Power/Alerts */
+        }
+
+        .c-tech-label {
+            font-family: var(--font-tech);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            color: var(--color-accent-pg);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .c-tech-data {
+            font-family: var(--font-tech);
+            font-weight: 400;
+            color: #F7F9FA;
+        }
+
+        .c-bom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        .c-bom-table th {
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 1rem 0;
+            color: var(--color-accent-pg);
+        }
+        .c-bom-table td {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .c-code-block {
+            background: var(--color-code-bg);
+            border-left: 3px solid var(--color-accent-pg);
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: #a9b7c6;
+            border-radius: 4px;
+        }
+        .keyword { color: #cc7832; }
+        .string { color: #6a8759; }
+        .function { color: #ffc66d; }
+        .number { color: #6897bb; }
+        .comment { color: #808080; font-style: italic; }
+    </style>
+</head>
+<body data-barba="wrapper">
+
+    <header class="c-header" data-scroll-sticky data-scroll-target="#main">
+        <div class="o-container">
+            <div class="c-header__wrapper">
+                <a href="index.html" class="c-header__logo-text">M0NARQ</a>
+                <nav class="c-nav">
+                    <ul class="c-nav__list">
+                        <li class="c-nav__item"><a href="index.html" class="c-nav__link">Home</a></li>
+                        <li class="c-nav__item"><a href="work.html" class="c-nav__link">Tools</a></li>
+                        <li class="c-nav__item"><a href="#" class="c-nav__link is-active">PowerGuard</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="o-scroll" id="main" data-barba="container" data-barba-namespace="detail">
+        <div data-scroll-container>
+
+            <header class="c-hero" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-hero__content">
+                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Module 02</span>
+                        <h1 class="c-hero__title" data-scroll data-scroll-speed="1.5">
+                            PowerGuard
+                        </h1>
+                        <p class="c-hero__lead" data-scroll data-scroll-speed="1">
+                            High-frequency energy analytics. Predicting grid spikes 180s before they happen.<br>
+                            <span style="font-family: 'Sweet Sans Pro'; font-weight: 500; color: #FF6B1C;">EU CBAM Ready.</span>
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="o-grid">
+                        <div class="o-grid__col u-4/12@md">
+                            <h2 class="c-heading-small">The Leakage</h2>
+                        </div>
+                        <div class="o-grid__col u-8/12@md">
+                            <p class="c-text-body">
+                                Energy volatility is the silent killer of margin. Factories operate on 30% capacity due to LNG shortages, relying on captive diesel generators that cost <strong>$0.32/kWh</strong> (vs grid $0.12). 
+                            </p>
+                            <p class="c-text-body u-margin-top-small">
+                                Furthermore, the EU Green Deal (CBAM) entering force in 2026 demands granular energy audits. Handwritten logs are no longer compliant.
+                            </p>
+                            <div class="o-grid u-margin-top-medium">
+                                <div class="o-grid__col u-4/12@md">
+                                    <span class="c-tech-label">Wasted Energy</span>
+                                    <span class="c-heading-medium">$281M</span>
+                                </div>
+                                <div class="o-grid__col u-4/12@md">
+                                    <span class="c-tech-label">Lead Time</span>
+                                    <span class="c-heading-medium">180s</span>
+                                </div>
+                                <div class="o-grid__col u-4/12@md">
+                                    <span class="c-tech-label">Compliance</span>
+                                    <span class="c-heading-medium">DPP / Parquet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="c-divider" data-scroll-section>
+
+            <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-section-header u-margin-bottom-large">
+                        <h2 class="c-heading-medium">Analysis Pipeline</h2>
+                    </div>
+
+                    <div class="o-grid o-grid--middle">
+                        <div class="o-grid__col u-5/12@md">
+                            <ul class="c-list-clean">
+                                <li class="u-margin-bottom-medium">
+                                    <span class="c-tech-label">Sensor Fusion</span>
+                                    <p class="c-tech-data">
+                                        <strong>PZEM-004T + ESP32</strong>. Polling Voltage, Current, Power Factor at 1Hz. Non-invasive CT clamp installation.
+                                    </p>
+                                </li>
+                                <li class="u-margin-bottom-medium">
+                                    <span class="c-tech-label">Algorithmic Core</span>
+                                    <p class="c-tech-data">
+                                        <strong>TS2Vec + MOMEMTO</strong>. A universal time-series framework with a memory gate to handle "concept drift" over months of operation.
+                                    </p>
+                                </li>
+                                <li class="u-margin-bottom-medium">
+                                    <span class="c-tech-label">Change Point Detection</span>
+                                    <p class="c-tech-data">
+                                        <strong>Bayesian CPD (Ruptures)</strong>. Identifies structural changes in consumption to trigger "Peak Shaving" alerts.
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="o-grid__col u-7/12@md" data-scroll data-scroll-speed="1">
+                            <span class="c-tech-label">power_analytics.py</span>
+                            <div class="c-code-block">
+<span class="keyword">class</span> <span class="function">PowerMonitor</span>:
+    <span class="keyword">def</span> <span class="function">__enter__</span>(self):
+        <span class="comment"># Load TS2Vec Model with Memory Gate</span>
+        self.ts2vec = TS2Vec(input_dims=<span class="number">1</span>, output_dims=<span class="number">64</span>)
+        
+    <span class="keyword">def</span> <span class="function">analyze_stream</span>(self, readings):
+        <span class="comment"># 1. Vectorize Data Stream</span>
+        vec = self.ts2vec.encode(readings)
+        
+        <span class="comment"># 2. Reconstruct & Calc Error (Anomaly Detection)</span>
+        reconstruction = vec.mean()
+        error = (readings - reconstruction) ** <span class="number">2</span>
+        
+        <span class="comment"># 3. Bayesian Change Point Detection (PELT)</span>
+        bkpts = rpt.Pelt(model=<span class="string">"rbf"</span>).fit(error).predict(pen=<span class="number">3</span>)
+        
+        <span class="comment"># 4. Determine Grid Status (Peak vs Off-Peak)</span>
+        is_peak = <span class="number">17</span> <= datetime.now().hour <= <span class="number">23</span>
+        
+        <span class="keyword">return</span> {
+            <span class="string">"surge_detected"</span>: error[-1] > <span class="number">2.5</span> * error.mean(),
+            <span class="string">"action"</span>: <span class="string">"ACTIVATE_GENERATOR"</span> <span class="keyword">if</span> is_peak <span class="keyword">else</span> <span class="string">"MONITOR"</span>
+        }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="c-section u-padding-vertical-large u-bg-dark" data-scroll-section>
+                <div class="o-container">
+                    <h2 class="c-heading-small u-text-white">Bill of Materials (BOM)</h2>
+                    <p class="c-text-small u-opacity-70">Dhaka Market Pricing (Nov 2025)</p>
+                    
+                    <div class="o-grid">
+                        <div class="o-grid__col u-8/12@md">
+                            <table class="c-bom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Component</th>
+                                        <th>Spec</th>
+                                        <th>Cost (BDT)</th>
+                                        <th>Cost (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sensor Module</td>
+                                        <td>PZEM-004T v3</td>
+                                        <td>৳ 980</td>
+                                        <td>$8.80</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Microcontroller</td>
+                                        <td>ESP32 WROOM-32</td>
+                                        <td>৳ 430</td>
+                                        <td>$3.90</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Power Supply</td>
+                                        <td>5V DC Buck Converter</td>
+                                        <td>৳ 150</td>
+                                        <td>$1.35</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #fff; font-weight: 500;">TOTAL CAPEX</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="color: #FF6B1C; font-weight: 700;">$14.05</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="o-grid__col u-4/12@md u-padding-left-large">
+                            <div class="c-tech-spec" style="background: transparent; border: 1px solid #333;">
+                                <span class="c-tech-label">ROI Impact</span>
+                                <ul class="c-list-clean c-text-small u-margin-top-small">
+                                    <li class="u-margin-bottom-small">
+                                        <strong class="u-text-white">Diesel Savings:</strong><br>
+                                        Prevents peak-hour generator usage.
+                                    </li>
+                                    <li>
+                                        <strong class="u-text-white">EU Compliance:</strong><br>
+                                        Automated "Green Certificate" export.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="c-footer u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-footer__wrapper">
+                        <div class="c-footer__brand">
+                            <a href="index.html" class="c-header__logo-text">M0NARQ</a>
+                        </div>
+                        <div class="c-footer__links">
+                            <a href="work.html" class="c-footer__link">Back to Tools</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <script src="assets/js/vendors.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
