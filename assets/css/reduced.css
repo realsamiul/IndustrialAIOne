@@ -1,47 +1,68 @@
 /* assets/css/reduced.css */
 /* M0NARQ Industrial-AI.One Design System */
-/* Fonts: Editorial New (Headings) + Helvetica Now Display (Tech/Body) */
+/* Optimized & Corrected based on Evaluation Report */
 
-/* ── 1. FONT DECLARATIONS ───────────────────────────────── */
+/* ── 1. FONT DECLARATIONS (Strict Adherence to Guide) ───── */
 
-/* Primary: Editorial New */
+/* Editorial New (Headings & UI) */
 @font-face {
   font-family: 'EditorialNew';
+  src: url('../fonts/EditorialNew-Regular.woff2') format('woff2'),
+       url('../fonts/EditorialNew-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url('../fonts/EditorialNew-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'EditorialNew';
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-  src: url('../fonts/EditorialNew-Ultrabold.woff2') format('woff2');
-}
-
-/* Secondary/Tech: Helvetica Now Display */
-@font-face {
-  font-family: 'HelveticaNowDisplay';
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: url('../fonts/HelveticaNowDisplay-Regular.woff2') format('woff2'),
-       url('../fonts/HelveticaNowDisplay-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'HelveticaNowDisplay';
+  src: url('../fonts/EditorialNew-Bold.woff2') format('woff2'),
+       url('../fonts/EditorialNew-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src: url('../fonts/HelveticaNowDisplay-Bold.woff2') format('woff2'); /* Assuming Bold exists based on request */
+}
+
+@font-face {
+  font-family: 'EditorialNew';
+  src: url('../fonts/EditorialNew-Light.woff2') format('woff2'),
+       url('../fonts/EditorialNew-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EditorialNew';
+  src: url('../fonts/EditorialNew-Medium.woff2') format('woff2'),
+       url('../fonts/EditorialNew-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Helvetica Now Display (Body & Tech) */
+@font-face {
+  font-family: 'HelveticaNowDisplay';
+  src: url('../fonts/HelveticaNowDisplay-Regular.woff2') format('woff2'),
+       url('../fonts/HelveticaNowDisplay-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HelveticaNowDisplay';
+  src: url('../fonts/HelveticaNowDisplay-Bold.woff2') format('woff2'),
+       url('../fonts/HelveticaNowDisplay-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* ── 2. VARIABLES ───────────────────────────────────────── */
 :root {
-  /* Palette: Industrial Navy & Textile Teal */
+  /* Palette */
   --color-dark: #0E1B2B;
   --color-light: #F7F9FA;
   --color-accent: #009CA6;
@@ -49,10 +70,10 @@
   --color-accent-fp: #E0E0E0;
   --color-border: rgba(14, 27, 43, 0.1);
   
-  /* Typography */
+  /* Typography Mapping */
   --font-primary: 'EditorialNew', serif;
   --font-secondary: 'HelveticaNowDisplay', sans-serif;
-  --font-tech: 'HelveticaNowDisplay', sans-serif;
+  --font-tech: 'HelveticaNowDisplay', sans-serif; /* Mapped to Helvetica as requested */
   --font-code: 'JetBrains Mono', monospace;
   
   /* Scale */
@@ -60,6 +81,7 @@
   --font-size-h2: clamp(2rem, 5vw, 4rem);
   --font-size-h3: clamp(1.5rem, 3vw, 2.5rem);
   --font-size-body: 1.125rem;
+  --font-size-medium: 1.7333333333rem; /* Restored from original main.css reference */
   --font-size-small: 0.875rem;
   
   /* Layout */
@@ -71,7 +93,7 @@
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ── 3. RESET ───────────────────────────────────────────── */
+/* ── 3. GLOBAL RESET & TYPOGRAPHY ───────────────────────── */
 *, *:before, *:after {
   box-sizing: border-box;
   margin: 0;
@@ -82,6 +104,8 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'HelveticaNowDisplay', Arial, sans-serif; /* Step 3 Global */
+  line-height: 1.3;
 }
 
 body {
@@ -89,11 +113,11 @@ body {
   min-height: 100vh;
   background-color: var(--color-light);
   color: var(--color-dark);
-  font-family: var(--font-secondary);
+  font-family: 'HelveticaNowDisplay', Arial, sans-serif;
+  font-size: 15px;
   overflow-x: hidden;
 }
 
-/* Locomotive Container */
 html.has-scroll-smooth {
   overflow: hidden;
   position: fixed;
@@ -105,18 +129,18 @@ html.has-scroll-smooth {
   perspective: 1px;
 }
 
-/* ── 4. TYPOGRAPHY UTILITIES ────────────────────────────── */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-primary);
-  font-weight: 400;
-  line-height: 1;
-  margin: 0;
+/* Headings (EditorialNew) */
+h1, h2, h3, h4, h5, h6, 
+.c-heading {
+  font-family: 'EditorialNew', sans-serif;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 /* Hero Typography */
 .c-hero__title {
-  font-family: var(--font-primary);
-  font-weight: 800;
+  font-family: 'EditorialNew', sans-serif;
+  font-weight: 700;
   font-size: var(--font-size-h1);
   letter-spacing: -0.03em;
   line-height: 0.9;
@@ -136,9 +160,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .c-hero__lead {
   font-family: var(--font-secondary);
-  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-size: var(--font-size-medium);
   line-height: 1.4;
-  max-width: 40ch;
+  max-width: 48em; /* Adjusted per Critical Fix */
+  margin-top: 2rem;
 }
 
 .u-text-stroke {
@@ -150,57 +175,63 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 10%;
 }
 
-/* Content Typography (Matched to HTML classes) */
-.c-heading-large {
-  font-size: var(--font-size-h1);
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-}
+/* ── 4. CRITICAL CSS CLASSES (From Markdown) ────────────── */
 
-.c-heading-medium {
-  font-size: var(--font-size-h2);
-  margin-bottom: 1rem;
-}
-
-.c-heading-small {
-  font-family: var(--font-tech);
+.c-heading-small { 
+  font-size: var(--font-size-h3); 
+  font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-  display: block;
+  margin-bottom: 1rem; 
 }
 
-.c-text-body {
-  font-size: var(--font-size-body);
-  line-height: 1.6;
-  opacity: 0.85;
-  max-width: 55ch;
-  margin-bottom: 1.5rem;
-}
-
-.c-text-small {
-  font-family: var(--font-tech);
-  font-size: var(--font-size-small);
-  opacity: 0.7;
-}
-
-/* Tech Spec Labels */
-.c-tech-label {
-  font-family: var(--font-tech);
+.c-heading-medium { 
+  font-size: var(--font-size-h2); 
+  font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-  display: block;
+  margin-bottom: 1.5rem; 
 }
 
-.c-tech-data {
-  font-family: var(--font-secondary);
-  font-size: 1rem;
-  color: inherit;
+.c-heading-large { 
+  font-size: var(--font-size-h1); 
+  font-family: 'EditorialNew', sans-serif;
+  font-weight: 700;
+  margin-bottom: 2rem; 
+}
+
+.c-text-body { 
+  font-family: 'HelveticaNowDisplay', sans-serif;
+  font-weight: 400;
+  font-size: var(--font-size-body); 
+  line-height: 1.6; 
+  margin-bottom: 1rem; 
+}
+
+.c-text-small { 
+  font-family: 'HelveticaNowDisplay', sans-serif;
+  font-size: 0.85rem; 
+  line-height: 1.5; 
+}
+
+.c-list-clean {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 4rem 0;
+}
+
+/* Grid Fixes */
+.o-grid--middle { align-items: center; }
+/* Note: RTL override removed as it can break layout if not strictly needed, keeping align logic */
+
+/* Responsive Margins */
+.u-margin-bottom-medium\@sm { margin-bottom: 2rem; }
+@media (min-width: 700px) {
+  .u-margin-bottom-medium\@sm { margin-bottom: 0; }
 }
 
 /* ── 5. GRID SYSTEM ─────────────────────────────────────── */
@@ -219,27 +250,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .o-grid__col {
   padding-left: var(--gutter);
-  width: 100%; /* Default mobile */
+  width: 100%;
 }
 
 .o-grid--reverse { flex-direction: row-reverse; }
-.o-grid--middle { align-items: center; }
 
-/* Responsive Utilities (Escaped for u-6/12@md) */
 @media (min-width: 768px) {
-  .u-1\/12\@md { width: 8.3333%; }
-  .u-2\/12\@md { width: 16.6666%; }
-  .u-3\/12\@md { width: 25%; }
   .u-4\/12\@md { width: 33.3333%; }
   .u-5\/12\@md { width: 41.6666%; }
   .u-6\/12\@md { width: 50%; }
   .u-7\/12\@md { width: 58.3333%; }
   .u-8\/12\@md { width: 66.6666%; }
-  .u-9\/12\@md { width: 75%; }
-  .u-10\/12\@md { width: 83.3333%; }
-  .u-11\/12\@md { width: 91.6666%; }
-  .u-12\/12\@md { width: 100%; }
-
+  
+  /* Critical Fixes for Push/Pull */
   .u-push-1\/12\@md { margin-left: 8.3333%; }
   .u-pull-1\/12\@md { margin-right: 8.3333%; }
   
@@ -247,7 +270,7 @@ h1, h2, h3, h4, h5, h6 {
   .u-padding-left-large { padding-left: 6rem; }
 }
 
-/* ── 6. NAVIGATION ──────────────────────────────────────── */
+/* ── 6. NAVIGATION & HEADER ─────────────────────────────── */
 .c-header {
   position: fixed;
   top: 0; left: 0; width: 100%;
@@ -264,18 +287,20 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
+/* Critical Fix: Wrapper */
 .c-header__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Critical Fix: Logo Font */
 .c-header__logo-text {
   font-family: var(--font-tech);
-  font-weight: 700;
+  font-weight: 500; /* Medium per guide */
   font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.05em;
   text-decoration: none;
   color: var(--color-dark);
 }
@@ -294,14 +319,13 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   opacity: 0.6;
   transition: opacity 0.3s ease;
-  position: relative;
 }
 
 .c-nav__link:hover, .c-nav__link.is-active {
   opacity: 1;
 }
 
-/* ── 7. COMPONENTS ──────────────────────────────────────── */
+/* ── 7. COMPONENTS & ENHANCEMENTS ───────────────────────── */
 
 /* Hero */
 .c-hero {
@@ -327,7 +351,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1.5rem;
 }
 
-/* Stats Grid */
+/* Stats */
 .c-stats-grid {
   display: flex;
   gap: 3rem;
@@ -338,7 +362,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .c-stat { display: flex; flex-direction: column; }
 .c-stat__value {
-  font-family: var(--font-primary);
+  font-family: 'EditorialNew', serif;
+  font-weight: 700;
   font-size: 3rem;
   color: var(--color-dark);
   line-height: 1;
@@ -352,8 +377,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0.5rem;
 }
 
-/* Code Blocks (Glassmorphism) */
+/* Code Blocks with Enhancement */
 .c-code-wrapper {
+  position: relative; /* For copy button positioning */
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -371,19 +397,39 @@ h1, h2, h3, h4, h5, h6 {
   white-space: pre;
 }
 
+/* Enhancement: Copy Button */
+.c-code-copy {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-family: var(--font-tech);
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.c-code-copy:hover {
+  background: rgba(255,255,255,0.2);
+}
+
 .keyword { color: #cc7832; }
 .string { color: #6a8759; }
 .function { color: #ffc66d; }
 .comment { color: #808080; font-style: italic; }
 
-/* Buttons */
+/* Buttons with Magnetic Effect Enhancement */
 .c-button {
   display: inline-block;
   padding: 1.1rem 2.2rem;
   background: transparent;
   border: 1px solid var(--color-dark);
   color: var(--color-dark);
-  font-family: var(--font-tech);
+  font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   text-decoration: none;
@@ -391,6 +437,21 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.05em;
   transition: all 0.3s ease;
   margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.c-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.c-button:hover::before {
+  transform: translateX(100%);
 }
 
 .c-button--primary {
@@ -407,6 +468,7 @@ h1, h2, h3, h4, h5, h6 {
 .c-footer {
   background-color: var(--color-light);
   border-top: 1px solid var(--color-border);
+  font-family: 'HelveticaNowDisplay', sans-serif;
 }
 
 .c-footer__wrapper {
@@ -444,10 +506,6 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.1em;
 }
 
-html:not(.is-loading) .c-preloader {
-  pointer-events: none;
-}
-
 .u-padding-vertical-large { padding: 8rem 0; }
 .u-padding-vertical-xlarge { padding: 12rem 0; }
 .u-margin-top-medium { margin-top: 2rem; }
@@ -464,13 +522,6 @@ html:not(.is-loading) .c-preloader {
 .u-opacity-70 { opacity: 0.7; }
 .u-text-center { text-align: center; }
 
-.c-divider {
-  border: 0;
-  height: 1px;
-  background: var(--color-border);
-  margin: 0;
-}
-
 /* ── 9. ANIMATION STATES ────────────────────────────────── */
 [data-scroll] {
   opacity: 0;
@@ -483,27 +534,16 @@ html:not(.is-loading) .c-preloader {
   transform: translateY(0);
 }
 
-/* Locomotive Scrollbar */
-.c-scrollbar {
-  position: absolute;
-  right: 0; top: 0;
-  width: 8px; height: 100%;
-  transform-origin: center right;
-  transition: transform 0.3s, opacity 0.3s;
-  opacity: 0; z-index: 9999;
-}
-.c-scrollbar:hover, .has-scroll-scrolling .c-scrollbar, .has-scroll-dragging .c-scrollbar {
-  opacity: 1;
-}
-.c-scrollbar_thumb {
-  position: absolute; top: 0; right: 0;
-  background-color: var(--color-dark);
-  opacity: 0.5; width: 100%;
-  border-radius: 10px; margin: 2px;
-  cursor: -webkit-grab; cursor: grab;
-}
-.has-scroll-dragging .c-scrollbar_thumb {
-  cursor: -webkit-grabbing; cursor: grabbing;
+/* Blockquotes & Captions (Font Adjustment) */
+blockquote, .c-home-summary_label {
+  font-family: 'EditorialNew', sans-serif;
+  font-weight: 500;
+  font-size: var(--font-size-medium);
+  line-height: 1.4;
 }
 
-
+.c-image_description {
+  font-family: 'HelveticaNowDisplay', sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
