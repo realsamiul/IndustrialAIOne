@@ -1,14 +1,8 @@
-/* assets/css/reduced.css */
-/* M0NARQ Industrial-AI.One Design System */
-/* Optimized & Corrected based on Evaluation Report */
-
-/* ── 1. FONT DECLARATIONS (Strict Adherence to Guide) ───── */
-
-/* Editorial New (Headings & UI) */
+/* ── FONT DECLARATIONS ────────────────────────────────────── */
 @font-face {
   font-family: 'EditorialNew';
-  src: url('../fonts/EditorialNew-Regular.woff2') format('woff2'),
-       url('../fonts/EditorialNew-Regular.woff') format('woff');
+  src: url(../fonts/EditorialNew-Regular.woff2) format('woff2'),
+       url(../fonts/EditorialNew-Regular.woff) format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,8 +10,8 @@
 
 @font-face {
   font-family: 'EditorialNew';
-  src: url('../fonts/EditorialNew-Bold.woff2') format('woff2'),
-       url('../fonts/EditorialNew-Bold.woff') format('woff');
+  src: url(../fonts/EditorialNew-Bold.woff2) format('woff2'),
+       url(../fonts/EditorialNew-Bold.woff) format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -25,8 +19,8 @@
 
 @font-face {
   font-family: 'EditorialNew';
-  src: url('../fonts/EditorialNew-Light.woff2') format('woff2'),
-       url('../fonts/EditorialNew-Light.woff') format('woff');
+  src: url(../fonts/EditorialNew-Light.woff2) format('woff2'),
+       url(../fonts/EditorialNew-Light.woff) format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -34,18 +28,17 @@
 
 @font-face {
   font-family: 'EditorialNew';
-  src: url('../fonts/EditorialNew-Medium.woff2') format('woff2'),
-       url('../fonts/EditorialNew-Medium.woff') format('woff');
+  src: url(../fonts/EditorialNew-Medium.woff2) format('woff2'),
+       url(../fonts/EditorialNew-Medium.woff) format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
-/* Helvetica Now Display (Body & Tech) */
 @font-face {
   font-family: 'HelveticaNowDisplay';
-  src: url('../fonts/HelveticaNowDisplay-Regular.woff2') format('woff2'),
-       url('../fonts/HelveticaNowDisplay-Regular.woff') format('woff');
+  src: url(../fonts/HelveticaNowDisplay-Regular.woff2) format('woff2'),
+       url(../fonts/HelveticaNowDisplay-Regular.woff) format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -53,48 +46,41 @@
 
 @font-face {
   font-family: 'HelveticaNowDisplay';
-  src: url('../fonts/HelveticaNowDisplay-Bold.woff2') format('woff2'),
-       url('../fonts/HelveticaNowDisplay-Bold.woff') format('woff');
+  src: url(../fonts/HelveticaNowDisplay-Bold.woff2) format('woff2'),
+       url(../fonts/HelveticaNowDisplay-Bold.woff) format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* ── 2. VARIABLES ───────────────────────────────────────── */
+/* ── CSS VARIABLES ────────────────────────────────────────── */
 :root {
-  /* Palette */
   --color-dark: #0E1B2B;
   --color-light: #F7F9FA;
   --color-accent: #009CA6;
   --color-accent-pg: #FF6B1C;
   --color-accent-fp: #E0E0E0;
   --color-border: rgba(14, 27, 43, 0.1);
-  
-  /* Typography Mapping */
   --font-primary: 'EditorialNew', serif;
   --font-secondary: 'HelveticaNowDisplay', sans-serif;
-  --font-tech: 'HelveticaNowDisplay', sans-serif; /* Mapped to Helvetica as requested */
+  --font-tech: 'HelveticaNowDisplay', sans-serif;
   --font-code: 'JetBrains Mono', monospace;
-  
-  /* Scale */
   --font-size-h1: clamp(3rem, 9vw, 8.5rem);
   --font-size-h2: clamp(2rem, 5vw, 4rem);
   --font-size-h3: clamp(1.5rem, 3vw, 2.5rem);
   --font-size-body: 1.125rem;
-  --font-size-medium: 1.7333333333rem; /* Restored from original main.css reference */
+  --font-size-medium: 1.7333333333rem;
   --font-size-small: 0.875rem;
-  
-  /* Layout */
   --header-height: 100px;
   --gutter: 20px;
   --container-width: 1440px;
-  
-  /* Animation */
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ── 3. GLOBAL RESET & TYPOGRAPHY ───────────────────────── */
-*, *:before, *:after {
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*,
+*:before,
+*:after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -104,8 +90,10 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'HelveticaNowDisplay', Arial, sans-serif; /* Step 3 Global */
+  font-family: 'HelveticaNowDisplay', Arial, sans-serif;
   line-height: 1.3;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -116,28 +104,37 @@ body {
   font-family: 'HelveticaNowDisplay', Arial, sans-serif;
   font-size: 15px;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+  overscroll-behavior: none; /* Prevent pull-to-refresh */
+  max-width: 100%;
 }
 
+/* ── LOCOMOTIVE SCROLL FIXES ──────────────────────────────── */
 html.has-scroll-smooth {
   overflow: hidden;
-  position: fixed;
-  left: 0; right: 0; top: 0; bottom: 0;
+  /* Removed position: fixed and coordinates - not needed with modern Locomotive */
+}
+
+html.has-scroll-smooth body {
+  overflow: hidden;
 }
 
 [data-scroll-container] {
   min-height: 100vh;
-  perspective: 1px;
+  /* Removed perspective: 1px - causes layering issues */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* Headings (EditorialNew) */
-h1, h2, h3, h4, h5, h6, 
-.c-heading {
+/* ── TYPOGRAPHY ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6, .c-heading {
   font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
   line-height: 1.1;
 }
 
-/* Hero Typography */
 .c-hero__title {
   font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
@@ -145,6 +142,8 @@ h1, h2, h3, h4, h5, h6,
   letter-spacing: -0.03em;
   line-height: 0.9;
   margin-bottom: 2rem;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .c-hero__eyebrow {
@@ -162,7 +161,7 @@ h1, h2, h3, h4, h5, h6,
   font-family: var(--font-secondary);
   font-size: var(--font-size-medium);
   line-height: 1.4;
-  max-width: 48em; /* Adjusted per Critical Fix */
+  max-width: 48em;
   margin-top: 2rem;
 }
 
@@ -175,43 +174,56 @@ h1, h2, h3, h4, h5, h6,
   padding-left: 10%;
 }
 
-/* ── 4. CRITICAL CSS CLASSES (From Markdown) ────────────── */
-
-.c-heading-small { 
-  font-size: var(--font-size-h3); 
+.c-heading-small {
+  font-size: var(--font-size-h3);
   font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
 
-.c-heading-medium { 
-  font-size: var(--font-size-h2); 
+.c-heading-medium {
+  font-size: var(--font-size-h2);
   font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
-  margin-bottom: 1.5rem; 
+  margin-bottom: 1.5rem;
 }
 
-.c-heading-large { 
-  font-size: var(--font-size-h1); 
+.c-heading-large {
+  font-size: var(--font-size-h1);
   font-family: 'EditorialNew', sans-serif;
   font-weight: 700;
-  margin-bottom: 2rem; 
+  margin-bottom: 2rem;
 }
 
-.c-text-body { 
+.c-text-body {
   font-family: 'HelveticaNowDisplay', sans-serif;
   font-weight: 400;
-  font-size: var(--font-size-body); 
-  line-height: 1.6; 
-  margin-bottom: 1rem; 
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  margin-bottom: 1rem;
 }
 
-.c-text-small { 
+.c-text-small {
   font-family: 'HelveticaNowDisplay', sans-serif;
-  font-size: 0.85rem; 
-  line-height: 1.5; 
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
+blockquote,
+.c-home-summary_label {
+  font-family: 'EditorialNew', sans-serif;
+  font-weight: 500;
+  font-size: var(--font-size-medium);
+  line-height: 1.4;
+}
+
+.c-image_description {
+  font-family: 'HelveticaNowDisplay', sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────────── */
 .c-list-clean {
   list-style: none;
   padding: 0;
@@ -224,17 +236,6 @@ h1, h2, h3, h4, h5, h6,
   margin: 4rem 0;
 }
 
-/* Grid Fixes */
-.o-grid--middle { align-items: center; }
-/* Note: RTL override removed as it can break layout if not strictly needed, keeping align logic */
-
-/* Responsive Margins */
-.u-margin-bottom-medium\@sm { margin-bottom: 2rem; }
-@media (min-width: 700px) {
-  .u-margin-bottom-medium\@sm { margin-bottom: 0; }
-}
-
-/* ── 5. GRID SYSTEM ─────────────────────────────────────── */
 .o-container {
   width: 100%;
   max-width: var(--container-width);
@@ -248,56 +249,56 @@ h1, h2, h3, h4, h5, h6,
   margin-left: calc(var(--gutter) * -1);
 }
 
+.o-grid--middle {
+  align-items: center;
+}
+
 .o-grid__col {
   padding-left: var(--gutter);
   width: 100%;
 }
 
-.o-grid--reverse { flex-direction: row-reverse; }
-
-@media (min-width: 768px) {
-  .u-4\/12\@md { width: 33.3333%; }
-  .u-5\/12\@md { width: 41.6666%; }
-  .u-6\/12\@md { width: 50%; }
-  .u-7\/12\@md { width: 58.3333%; }
-  .u-8\/12\@md { width: 66.6666%; }
-  
-  /* Critical Fixes for Push/Pull */
-  .u-push-1\/12\@md { margin-left: 8.3333%; }
-  .u-pull-1\/12\@md { margin-right: 8.3333%; }
-  
-  .u-padding-left-medium { padding-left: 4rem; }
-  .u-padding-left-large { padding-left: 6rem; }
+.o-grid--reverse {
+  flex-direction: row-reverse;
 }
 
-/* ── 6. NAVIGATION & HEADER ─────────────────────────────── */
+/* ── HEADER (FIXED) ───────────────────────────────────────── */
 .c-header {
   position: fixed;
-  top: 0; left: 0; width: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 100;
   padding: 2rem 0;
-  transition: transform 0.6s var(--ease-out), background-color 0.4s ease, padding 0.4s ease;
+  transition: transform 0.6s var(--ease-out),
+              background-color 0.4s ease,
+              padding 0.4s ease;
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
-.c-header.is-hidden { transform: translateY(-100%); }
+.c-header.is-hidden {
+  transform: translateY(-100%);
+}
+
 .c-header.is-scrolled {
   padding: 1rem 0;
   background-color: rgba(247, 249, 250, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  will-change: backdrop-filter;
 }
 
-/* Critical Fix: Wrapper */
 .c-header__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Critical Fix: Logo Font */
 .c-header__logo-text {
   font-family: var(--font-tech);
-  font-weight: 500; /* Medium per guide */
+  font-weight: 500;
   font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -305,6 +306,7 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-dark);
 }
 
+/* ── NAVIGATION ───────────────────────────────────────────── */
 .c-nav__list {
   display: flex;
   list-style: none;
@@ -321,22 +323,41 @@ h1, h2, h3, h4, h5, h6,
   transition: opacity 0.3s ease;
 }
 
-.c-nav__link:hover, .c-nav__link.is-active {
+.c-nav__link:hover,
+.c-nav__link.is-active {
   opacity: 1;
 }
 
-/* ── 7. COMPONENTS & ENHANCEMENTS ───────────────────────── */
-
-/* Hero */
+/* ── HERO SECTION (FIXED) ─────────────────────────────────── */
 .c-hero {
   min-height: 90vh;
   display: flex;
   align-items: center;
   padding-top: var(--header-height);
+  /* FIXES for sliding under issue */
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-light);
+  isolation: isolate;
+  contain: layout style;
+  will-change: transform;
+  transform: translateZ(0);
 }
-.c-hero--small { min-height: 60vh; }
 
-/* Tags */
+.c-hero--small {
+  min-height: 60vh;
+}
+
+/* ── SECTIONS (PREVENT OVERLAP) ──────────────────────────── */
+section,
+.c-section {
+  position: relative;
+  z-index: 2;
+  background-color: var(--color-light);
+  isolation: isolate;
+}
+
+/* ── COMPONENTS ───────────────────────────────────────────── */
 .c-tag {
   display: inline-block;
   font-family: var(--font-tech);
@@ -351,16 +372,20 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 1.5rem;
 }
 
-/* Stats */
 .c-stats-grid {
   display: flex;
   gap: 3rem;
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
 }
 
-.c-stat { display: flex; flex-direction: column; }
+.c-stat {
+  display: flex;
+  flex-direction: column;
+}
+
 .c-stat__value {
   font-family: 'EditorialNew', serif;
   font-weight: 700;
@@ -368,6 +393,7 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-dark);
   line-height: 1;
 }
+
 .c-stat__label {
   font-family: var(--font-tech);
   font-weight: 700;
@@ -377,12 +403,12 @@ h1, h2, h3, h4, h5, h6,
   margin-top: 0.5rem;
 }
 
-/* Code Blocks with Enhancement */
+/* ── CODE BLOCKS ──────────────────────────────────────────── */
 .c-code-wrapper {
-  position: relative; /* For copy button positioning */
+  position: relative;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
 }
 
@@ -397,15 +423,14 @@ h1, h2, h3, h4, h5, h6,
   white-space: pre;
 }
 
-/* Enhancement: Copy Button */
 .c-code-copy {
   position: absolute;
   top: 1rem;
   right: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
   font-family: var(--font-tech);
   font-size: 0.75rem;
   border-radius: 4px;
@@ -413,16 +438,29 @@ h1, h2, h3, h4, h5, h6,
   transition: background 0.2s;
   z-index: 10;
 }
+
 .c-code-copy:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.keyword { color: #cc7832; }
-.string { color: #6a8759; }
-.function { color: #ffc66d; }
-.comment { color: #808080; font-style: italic; }
+.keyword {
+  color: #cc7832;
+}
 
-/* Buttons with Magnetic Effect Enhancement */
+.string {
+  color: #6a8759;
+}
+
+.function {
+  color: #ffc66d;
+}
+
+.comment {
+  color: gray;
+  font-style: italic;
+}
+
+/* ── BUTTONS ──────────────────────────────────────────────── */
 .c-button {
   display: inline-block;
   padding: 1.1rem 2.2rem;
@@ -439,19 +477,24 @@ h1, h2, h3, h4, h5, h6,
   margin-top: 2rem;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .c-button::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-  transform: translateX(-100%);
+  background: linear-gradient(45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%);
+  transform: translateX(-100%) translateZ(0); /* Added translateZ */
   transition: transform 0.6s;
+  will-change: transform;
 }
 
 .c-button:hover::before {
-  transform: translateX(100%);
+  transform: translateX(100%) translateZ(0);
 }
 
 .c-button--primary {
@@ -464,17 +507,21 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-dark);
 }
 
-/* Footer */
+/* ── FOOTER ───────────────────────────────────────────────── */
 .c-footer {
   background-color: var(--color-light);
   border-top: 1px solid var(--color-border);
   font-family: 'HelveticaNowDisplay', sans-serif;
+  position: relative;
+  z-index: 2;
 }
 
 .c-footer__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .c-footer__link {
@@ -484,12 +531,20 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 0.5rem;
   text-decoration: none;
   color: var(--color-dark);
+  transition: opacity 0.3s ease;
 }
 
-/* ── 8. PRELOADER & UTILS ───────────────────────────────── */
+.c-footer__link:hover {
+  opacity: 0.6;
+}
+
+/* ── PRELOADER ────────────────────────────────────────────── */
 .c-preloader {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: var(--color-dark);
   color: var(--color-light);
   z-index: 9999;
@@ -506,44 +561,214 @@ h1, h2, h3, h4, h5, h6,
   letter-spacing: 0.1em;
 }
 
-.u-padding-vertical-large { padding: 8rem 0; }
-.u-padding-vertical-xlarge { padding: 12rem 0; }
-.u-margin-top-medium { margin-top: 2rem; }
-.u-margin-bottom-small { margin-bottom: 1rem; }
-.u-margin-bottom-medium { margin-bottom: 2rem; }
+/* ── DATA SCROLL ANIMATIONS (OPTIMIZED) ──────────────────── */
+[data-scroll] {
+  opacity: 0;
+  transform: translateY(10px); /* Reduced from 30px */
+  transition: opacity 1.2s var(--ease-out),
+              transform 1.2s var(--ease-out);
+  will-change: opacity, transform;
+}
+
+[data-scroll].is-inview {
+  opacity: 1;
+  transform: translateY(0) translateZ(0); /* Added translateZ for GPU */
+}
+
+/* ── UTILITIES ────────────────────────────────────────────── */
+.u-padding-vertical-large {
+  padding: 8rem 0;
+}
+
+.u-padding-vertical-xlarge {
+  padding: 12rem 0;
+}
+
+.u-margin-top-medium {
+  margin-top: 2rem;
+}
+
+.u-margin-bottom-small {
+  margin-bottom: 1rem;
+}
+
+.u-margin-bottom-medium {
+  margin-bottom: 2rem;
+}
+
+.u-margin-bottom-medium\@sm {
+  margin-bottom: 2rem;
+}
 
 .u-bg-dark {
   background-color: var(--color-dark);
   color: var(--color-light);
 }
 
-.u-text-white { color: #fff !important; }
-.u-text-teal { color: var(--color-accent) !important; }
-.u-opacity-70 { opacity: 0.7; }
-.u-text-center { text-align: center; }
-
-/* ── 9. ANIMATION STATES ────────────────────────────────── */
-[data-scroll] {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out);
+.u-text-white {
+  color: #fff !important;
 }
 
-[data-scroll].is-inview {
-  opacity: 1;
-  transform: translateY(0);
+.u-text-teal {
+  color: var(--color-accent) !important;
 }
 
-/* Blockquotes & Captions (Font Adjustment) */
-blockquote, .c-home-summary_label {
-  font-family: 'EditorialNew', sans-serif;
-  font-weight: 500;
-  font-size: var(--font-size-medium);
-  line-height: 1.4;
+.u-opacity-70 {
+  opacity: 0.7;
 }
 
-.c-image_description {
-  font-family: 'HelveticaNowDisplay', sans-serif;
-  font-weight: 400;
-  font-size: 0.875rem;
+.u-text-center {
+  text-align: center;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (min-width: 700px) {
+  .u-margin-bottom-medium\@sm {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .u-4\/12\@md {
+    width: 33.3333%;
+  }
+  
+  .u-5\/12\@md {
+    width: 41.6666%;
+  }
+  
+  .u-6\/12\@md {
+    width: 50%;
+  }
+  
+  .u-7\/12\@md {
+    width: 58.3333%;
+  }
+  
+  .u-8\/12\@md {
+    width: 66.6666%;
+  }
+  
+  .u-push-1\/12\@md {
+    margin-left: 8.3333%;
+  }
+  
+  .u-pull-1\/12\@md {
+    margin-right: 8.3333%;
+  }
+  
+  .u-padding-left-medium {
+    padding-left: 4rem;
+  }
+  
+  .u-padding-left-large {
+    padding-left: 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .c-nav__list {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .c-hero__title {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+  
+  .c-stats-grid {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .c-footer__wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ── ACCESSIBILITY ────────────────────────────────────────── */
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-dark);
+  color: var(--color-light);
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 200;
+  border-radius: 4px;
+}
+
+.skip-to-main:focus {
+  top: 10px;
+  left: 10px;
+}
+
+/* Focus states */
+a:focus,
+button:focus,
+.c-button:focus,
+.c-nav__link:focus,
+.c-code-copy:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Focus visible only for keyboard navigation */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  [data-scroll] {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .c-button::before {
+    display: none;
+  }
+}
+
+/* ── LOADING STATE ────────────────────────────────────────── */
+html.is-loading {
+  overflow: hidden;
+}
+
+html.is-loading body {
+  overflow: hidden;
+}
+
+/* ── PRINT STYLES ─────────────────────────────────────────── */
+@media print {
+  .c-header,
+  .c-footer,
+  .c-button,
+  .c-code-copy {
+    display: none;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+  
+  .c-hero {
+    min-height: auto;
+    padding: 2rem 0;
+  }
 }
