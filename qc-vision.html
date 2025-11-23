@@ -1,96 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<html lang="en" class="has-scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M0NARQ | QC Vision</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    
-    <style>
-        /* FONT MAPPING (Fallback if main.css doesn't cover Sweet Sans) */
-        @font-face {
-            font-family: 'Sweet Sans Pro';
-            src: url('assets/fonts/SweetSansPro-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Sweet Sans Pro';
-            src: url('assets/fonts/SweetSansPro-Medium.woff2') format('woff2');
-            font-weight: 500;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Sweet Sans Pro';
-            src: url('assets/fonts/SweetSansPro-ThinItalic.woff2') format('woff2');
-            font-weight: 100;
-            font-style: italic;
-        }
-
-        /* TECHNICAL STYLING overrides */
-        :root {
-            --font-tech: 'Sweet Sans Pro', 'FK Roman', sans-serif;
-            --color-code-bg: #0b121b;
-            --color-accent-qc: #009CA6; 
-        }
-
-        .c-tech-label {
-            font-family: var(--font-tech);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.75rem;
-            color: var(--color-accent-qc);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .c-tech-data {
-            font-family: var(--font-tech);
-            font-weight: 400;
-            color: #F7F9FA;
-        }
-
-        .c-bom-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-tech);
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-        .c-bom-table th {
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding: 1rem 0;
-            color: var(--color-accent-qc);
-        }
-        .c-bom-table td {
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        /* Code Block Refinement */
-        .c-code-block {
-            background: var(--color-code-bg);
-            border-left: 3px solid var(--color-accent-qc);
-            padding: 2rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            overflow-x: auto;
-            color: #a9b7c6;
-            border-radius: 4px;
-        }
-        .keyword { color: #cc7832; }
-        .string { color: #6a8759; }
-        .function { color: #ffc66d; }
-        .number { color: #6897bb; }
-        .comment { color: #808080; font-style: italic; }
-    </style>
+    <link rel="stylesheet" href="assets/css/reduced.css">
 </head>
 <body data-barba="wrapper">
 
-    <header class="c-header" data-scroll-sticky data-scroll-target="#main">
+    <header class="c-header">
         <div class="o-container">
             <div class="c-header__wrapper">
                 <a href="index.html" class="c-header__logo-text">M0NARQ</a>
@@ -131,19 +49,19 @@
                         </div>
                         <div class="o-grid__col u-8/12@md">
                             <p class="c-text-body">
-                                RMG factories in Bangladesh lose <strong>3-5% of total yardage</strong> to defects like oil stains, needle holes, and misprints. Current solutions are polarized: manual inspection (slow, error-prone) or imported AOI rigs (KeyeTech/Kevision) that cost >$12,000 and are hardware-locked.
+                                RMG factories in Bangladesh lose <strong>3-5% of total yardage</strong> to defects like oil stains, needle holes, and misprints. Current solutions are polarized: manual inspection (slow, error-prone) or imported AOI rigs (KeyeTech/Kevision) that cost &gt;$12,000 and are hardware-locked.
                             </p>
                             <div class="o-grid u-margin-top-medium">
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-tech-label">Lost Value</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Lost Value</span>
                                     <span class="c-heading-medium">$390M</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-tech-label">Defect Reduction</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Defect Reduction</span>
                                     <span class="c-heading-medium">-38%</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-tech-label">Payback Period</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Payback Period</span>
                                     <span class="c-heading-medium">47 Days</span>
                                 </div>
                             </div>
@@ -162,22 +80,22 @@
 
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-5/12@md">
-                            <ul class="c-list-clean">
+                            <ul style="list-style:none; padding:0;">
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-tech-label">Backbone Model</span>
-                                    <p class="c-tech-data">
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Backbone Model</span>
+                                    <p class="c-text-small" style="margin-top:0.5rem;">
                                         <strong>MicroViT-Tiny-Q8</strong> (Quantized). 9M parameters. Replaced DINO-v2-Small for 3.6x speedup on CPU.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-tech-label">Segmentation</span>
-                                    <p class="c-tech-data">
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Segmentation</span>
+                                    <p class="c-text-small" style="margin-top:0.5rem;">
                                         <strong>PicoSAM-2</strong>. Promptable mask generation allows "Human-in-the-Loop" labeling by QA managers.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-tech-label">Deployment</span>
-                                    <p class="c-tech-data">
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Deployment</span>
+                                    <p class="c-text-small" style="margin-top:0.5rem;">
                                         Served via <strong>Modal.com</strong> Functions (FastAPI ASGI) with auto-scale-to-zero.
                                     </p>
                                 </li>
@@ -185,8 +103,8 @@
                         </div>
 
                         <div class="o-grid__col u-7/12@md" data-scroll data-scroll-speed="1">
-                            <span class="c-tech-label">production_inference.py</span>
-                            <div class="c-code-block">
+                            <div class="c-code-wrapper">
+                                <div class="c-code-block">
 <span class="keyword">class</span> <span class="function">QCModel</span>:
     <span class="keyword">def</span> <span class="function">__enter__</span>(self):
         <span class="keyword">from</span> huggingface_hub <span class="keyword">import</span> hf_hub_download
@@ -216,6 +134,7 @@
             <span class="string">"defect"</span>: bool(mask.mean() > <span class="number">0.07</span>),
             <span class="string">"mask_b64"</span>: encode_mask(mask)
         }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -225,57 +144,57 @@
             <section class="c-section u-padding-vertical-large u-bg-dark" data-scroll-section>
                 <div class="o-container">
                     <h2 class="c-heading-small u-text-white">Bill of Materials (BOM)</h2>
-                    <p class="c-text-small u-opacity-70">Dhaka Market Pricing (Nov 2025)</p>
+                    <p class="c-text-small u-opacity-70 u-text-white">Dhaka Market Pricing (Nov 2025)</p>
                     
                     <div class="o-grid">
                         <div class="o-grid__col u-8/12@md">
-                            <table class="c-bom-table">
+                            <table style="width:100%; border-collapse:collapse; margin-top:2rem; font-size:0.9rem; color:#fff;">
                                 <thead>
-                                    <tr>
-                                        <th>Component</th>
-                                        <th>Spec</th>
-                                        <th>Cost (BDT)</th>
-                                        <th>Cost (USD)</th>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.2);">
+                                        <th style="text-align:left; padding:1rem 0; color:#009CA6;">Component</th>
+                                        <th style="text-align:left; padding:1rem 0; color:#009CA6;">Spec</th>
+                                        <th style="text-align:left; padding:1rem 0; color:#009CA6;">Cost (BDT)</th>
+                                        <th style="text-align:left; padding:1rem 0; color:#009CA6;">Cost (USD)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Compute Core</td>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding:1rem 0;">Compute Core</td>
                                         <td>Raspberry Pi 5 (4GB)</td>
                                         <td>৳ 9,900</td>
                                         <td>$90.00</td>
                                     </tr>
-                                    <tr>
-                                        <td>Vision Sensor</td>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding:1rem 0;">Vision Sensor</td>
                                         <td>Recycled Android / USB Cam</td>
                                         <td>-</td>
                                         <td>$20.00</td>
                                     </tr>
-                                    <tr>
-                                        <td>Mounting</td>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding:1rem 0;">Mounting</td>
                                         <td>Tripod + Enclosure</td>
                                         <td>৳ 2,200</td>
                                         <td>$18.00</td>
                                     </tr>
                                     <tr>
-                                        <td style="color: #fff; font-weight: 500;">TOTAL CAPEX</td>
+                                        <td style="padding:1rem 0; font-weight:500;">TOTAL CAPEX</td>
                                         <td></td>
                                         <td></td>
-                                        <td style="color: #009CA6; font-weight: 700;">$128.00</td>
+                                        <td style="color:#009CA6; font-weight:700;">$128.00</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="o-grid__col u-4/12@md u-padding-left-large">
-                            <div class="c-tech-spec" style="background: transparent; border: 1px solid #333;">
-                                <span class="c-tech-label">Competitive Comparison</span>
-                                <ul class="c-list-clean c-text-small u-margin-top-small">
-                                    <li class="u-margin-bottom-small">
-                                        <strong class="u-text-white">KeyeTech AOI Rig:</strong><br>
+                            <div style="border:1px solid rgba(255,255,255,0.2); padding:1.5rem; border-radius:4px;">
+                                <span class="c-heading-small" style="font-size:0.75rem; text-transform:uppercase; color:#009CA6;">Competitive Comparison</span>
+                                <ul style="list-style:none; padding:0; margin-top:1rem; font-size:0.85rem; color:#fff;">
+                                    <li style="margin-bottom:1rem;">
+                                        <strong>KeyeTech AOI Rig:</strong><br>
                                         $12,000 upfront. Closed System.
                                     </li>
                                     <li>
-                                        <strong class="u-text-white">Industrial-AI.One:</strong><br>
+                                        <strong>Industrial-AI.One:</strong><br>
                                         $128 upfront. $149/mo SaaS. Open API.
                                     </li>
                                 </ul>
@@ -301,7 +220,7 @@
         </div>
     </main>
 
-    <script src="assets/js/vendors.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>
+
