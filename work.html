@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M0NARQ | The Tools</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Custom Code Block Styling for Deep Dives */
+        .c-tech-spec {
+            background: rgba(14, 27, 43, 0.95);
+            border: 1px solid rgba(0, 156, 166, 0.3);
+            color: #F7F9FA;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-top: 1rem;
+        }
+        .c-tech-spec__label {
+            color: #009CA6;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .u-text-teal { color: #009CA6; }
+    </style>
+</head>
+<body data-barba="wrapper">
+
+    <header class="c-header" data-scroll-sticky data-scroll-target="#main">
+        <div class="o-container">
+            <div class="c-header__wrapper">
+                <a href="index.html" class="c-header__logo-text">M0NARQ</a>
+                <nav class="c-nav">
+                    <ul class="c-nav__list">
+                        <li class="c-nav__item"><a href="index.html" class="c-nav__link">Home</a></li>
+                        <li class="c-nav__item"><a href="work.html" class="c-nav__link is-active">The Tools</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="o-scroll" id="main" data-barba="container" data-barba-namespace="work">
+        <div data-scroll-container>
+
+            <header class="c-hero c-hero--small" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-hero__content">
+                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Core Modules</span>
+                        <h1 class="c-hero__title" data-scroll data-scroll-speed="1.2">
+                            Edge-Native<br>Intelligence
+                        </h1>
+                        <p class="c-hero__lead" data-scroll data-scroll-speed="0.5">
+                            Three drop-in AI modules. Zero cloud dependency.<br>
+                            $150 hardware BOM. 47-day ROI.
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="o-grid o-grid--middle">
+                        
+                        <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <figure class="c-media" data-scroll data-scroll-speed="-1">
+                                <div class="c-tech-spec">
+                                    <span class="c-tech-spec__label">Pipeline Architecture</span>
+                                    Input: 224x224 RGB Stream<br>
+                                    Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (28ms)<br>
+                                    Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable)<br>
+                                    Output: Binary Mask + Class<br>
+                                    Hardware: RPi 5 / Android (Snapdragon)
+                                </div>
+                            </figure>
+                        </div>
+
+                        <div class="o-grid__col u-5/12@md u-push-1/12@md" data-scroll data-scroll-speed="1">
+                            <span class="c-tag">Module 01</span>
+                            <h2 class="c-heading-medium u-margin-bottom-small">QC Vision</h2>
+                            <p class="c-text-body">
+                                <strong>The Problem:</strong> Manual QC misses 3-5% of defects, costing the industry $390M/yr. Cloud solutions fail due to latency (>3s) and bandwidth costs.
+                            </p>
+                            <p class="c-text-body">
+                                <strong>The Fix:</strong> A quantization-first approach. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains and needle holes in <90ms.
+                            </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">38%</span>
+                                    <span class="c-stat__label">Defect Reduction</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">9ms</span>
+                                    <span class="c-stat__label">Inference Time</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="c-divider" data-scroll-section>
+
+            <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="o-grid o-grid--middle o-grid--reverse">
+                        
+                        <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <figure class="c-media" data-scroll data-scroll-speed="-1">
+                                <div class="c-tech-spec">
+                                    <span class="c-tech-spec__label">Data Stream Analysis</span>
+                                    Sensor: PZEM-004T + ESP32 @ 1Hz<br>
+                                    Algorithm: <span class="u-text-teal">TS2Vec + MOMEMTO Gate</span><br>
+                                    Prediction: 4-Layer TCN Forecaster<br>
+                                    Compliance: EU CBAM / DPP Parquet Log<br>
+                                    Drift: Auto-calibration every 7 days
+                                </div>
+                            </figure>
+                        </div>
+
+                        <div class="o-grid__col u-5/12@md u-pull-1/12@md" data-scroll data-scroll-speed="1">
+                            <span class="c-tag">Module 02</span>
+                            <h2 class="c-heading-medium u-margin-bottom-small">PowerGuard</h2>
+                            <p class="c-text-body">
+                                <strong>The Problem:</strong> Energy is 15% of production cost. Grid instability forces reliance on expensive diesel ($0.32/kWh). EU CBAM requires audits by 2026.
+                            </p>
+                            <p class="c-text-body">
+                                <strong>The Fix:</strong> We treat power as a high-frequency time series. The system learns the "heartbeat" of a dye line and predicts spikes 180 seconds before they happen, allowing for automated peak shaving.
+                            </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">15%</span>
+                                    <span class="c-stat__label">Energy Saved</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">180s</span>
+                                    <span class="c-stat__label">Spike Warning</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <hr class="c-divider" data-scroll-section>
+
+            <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="o-grid o-grid--middle">
+                        
+                        <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <figure class="c-media" data-scroll data-scroll-speed="-1">
+                                <div class="c-tech-spec">
+                                    <span class="c-tech-spec__label">Vibration Analytics</span>
+                                    Sensor: MPU-6050 (X,Y,Z Accel)<br>
+                                    Model: <span class="u-text-teal">GRU-128 (NASA CMAPSS)</span><br>
+                                    Enhancement: Pi-Transformer Head<br>
+                                    Output: RUL (Remaining Useful Life)<br>
+                                    Alerts: Traffic Light (Green/Yellow/Red)
+                                </div>
+                            </figure>
+                        </div>
+
+                        <div class="o-grid__col u-5/12@md u-push-1/12@md" data-scroll data-scroll-speed="1">
+                            <span class="c-tag">Module 03</span>
+                            <h2 class="c-heading-medium u-margin-bottom-small">FailPredict</h2>
+                            <p class="c-text-body">
+                                <strong>The Problem:</strong> Unplanned mechanical downtime costs the sector $2.04B annually. Parts are replaced too early (waste) or too late (catastrophe).
+                            </p>
+                            <p class="c-text-body">
+                                <strong>The Fix:</strong> Condition-based maintenance. By analyzing vibration harmonics, we predict bearing and motor failure 5 hours in advance.
+                            </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">5hr</span>
+                                    <span class="c-stat__label">Failure Horizon</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">9.2x</span>
+                                    <span class="c-stat__label">Year 1 ROI</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="c-section u-padding-vertical-xlarge u-bg-dark" data-scroll-section>
+                <div class="o-container u-text-center">
+                    <h2 class="c-heading-large u-text-white" data-scroll data-scroll-speed="1">Deploy Tomorrow.</h2>
+                    <p class="c-text-body u-text-white u-opacity-70 u-margin-bottom-medium">
+                        Complete source code and BOM available for investor review.
+                    </p>
+                    <a href="mailto:invest@monarq.ai" class="c-button c-button--primary">
+                        Request The Deck
+                    </a>
+                </div>
+            </section>
+            
+            <footer class="c-footer u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="c-footer__wrapper">
+                        <div class="c-footer__brand">
+                            <span class="c-header__logo-text">M0NARQ</span>
+                            <p class="c-text-small u-margin-top-small">Chattogram, Bangladesh.</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <script src="assets/js/vendors.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
