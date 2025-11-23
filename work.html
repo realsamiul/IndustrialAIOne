@@ -31,6 +31,13 @@
         <div data-scroll-container>
 
             <header class="c-hero c-hero--small" data-scroll-section>
+                <!-- Hero Visual 1 -->
+                <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
+                    <div class="c-image -cover u-inset">
+                        <img src="assets/images/work1.webp" class="c-image_img" alt="Module Ecosystem" style="opacity: 0.2;">
+                    </div>
+                </div>
+
                 <div class="o-container">
                     <div class="c-hero__content">
                         <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Core Modules</span>
@@ -51,10 +58,14 @@
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <!-- Visual 2 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="u-margin-bottom-small">
+                                    <img src="assets/images/work2.webp" alt="QC Vision Hardware" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
                                     <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE ARCHITECTURE</span>
-                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
+                                    <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Input: 224x224 RGB Stream<br>
                                     Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (28ms)<br>
                                     Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable)<br>
@@ -100,10 +111,14 @@
                     <div class="o-grid o-grid--middle o-grid--reverse">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <!-- Visual 3 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="u-margin-bottom-small">
+                                    <img src="assets/images/work3.webp" alt="PowerGuard Dashboard" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
                                     <span class="c-heading-small" style="color: var(--color-accent-pg); display:block; margin-bottom:1rem; font-size:0.8rem;">DATA STREAM ANALYSIS</span>
-                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
+                                    <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: PZEM-004T + ESP32 @ 1Hz<br>
                                     Algorithm: <span style="color: var(--color-accent-pg);">TS2Vec + MOMEMTO Gate</span><br>
                                     Prediction: 4-Layer TCN Forecaster<br>
@@ -150,10 +165,14 @@
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
+                            <!-- Visual 4 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="u-margin-bottom-small">
+                                    <img src="assets/images/work4.webp" alt="FailPredict Sensors" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
                                     <span class="c-heading-small" style="color: var(--color-accent-fp); display:block; margin-bottom:1rem; font-size:0.8rem;">VIBRATION ANALYTICS</span>
-                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
+                                    <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: MPU-6050 (X,Y,Z Accel)<br>
                                     Model: <span style="color: var(--color-accent-fp);">GRU-128 (NASA CMAPSS)</span><br>
                                     Enhancement: Pi-Transformer Head<br>
@@ -221,5 +240,3 @@
     <script src="assets/js/app.js"></script>
 </body>
 </html>
-
-
