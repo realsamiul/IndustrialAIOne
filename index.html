@@ -49,11 +49,11 @@
     <header class="c-header" data-scroll-sticky data-scroll-target="#main">
         <div class="o-container">
             <div class="c-header__wrapper">
-                <a href="/" class="c-header__logo-text">M0NARQ</a>
+                <a href="index.html" class="c-header__logo-text">M0NARQ</a>
                 <nav class="c-nav">
                     <ul class="c-nav__list">
                         <li class="c-nav__item"><a href="#crisis" class="c-nav__link" data-scroll-to>The Crisis</a></li>
-                        <li class="c-nav__item"><a href="#tools" class="c-nav__link" data-scroll-to>The Tools</a></li>
+                        <li class="c-nav__item"><a href="work.html" class="c-nav__link">The Tools</a></li>
                         <li class="c-nav__item"><a href="#architecture" class="c-nav__link" data-scroll-to>Architecture</a></li>
                     </ul>
                 </nav>
@@ -107,9 +107,11 @@
 
             <section id="tools" class="c-section" data-scroll-section>
                 
+                <!-- TOOL 01 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
-                        <div class="o-grid o-grid--reverse"> <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
+                        <div class="o-grid o-grid--reverse"> 
+                            <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
                                 <div class="c-project__content">
                                     <span class="c-tag">Module 01</span>
                                     <h3 class="c-heading-large">QC Vision</h3>
@@ -117,9 +119,7 @@
                                         <strong>The Problem:</strong> Manual inspection misses 3-5% of defects. <br>
                                         <strong>The Solution:</strong> We don't stream video to the cloud. We run <strong>MicroViT-Tiny-Q8</strong> backbones directly on the device (Raspberry Pi 5 / Android).
                                     </p>
-                                    <p class="c-text-small u-margin-top-small">
-                                        <em>Tech Stack:</em> MicroViT, PicoSAM-2, ONNX Runtime (Int8 Quantization).
-                                    </p>
+                                    <a href="qc-vision.html" class="c-button c-button--primary u-margin-top-medium">View QC Specs</a>
                                 </div>
                             </div>
 
@@ -127,11 +127,6 @@
                                 <div class="c-code-wrapper" data-scroll data-scroll-speed="0.5">
                                     <pre class="c-code-block">
 <span class="keyword">class</span> <span class="function">DefectDetector</span>:
-    <span class="keyword">def</span> <span class="function">__enter__</span>(self):
-        <span class="comment"># Load DINO-v2 / MicroViT optimized for Edge</span>
-        self.vit = ort.InferenceSession(vit_path, providers=[<span class="string">"CUDAExecutionProvider"</span>])
-        self.sam = ort.InferenceSession(sam_path, providers=[<span class="string">"CUDAExecutionProvider"</span>])
-
     <span class="keyword">def</span> <span class="function">predict</span>(self, jpg_bytes):
         <span class="comment"># 1. Preprocess & Feature Extraction</span>
         arr = self.preprocess(jpg_bytes)
@@ -140,19 +135,19 @@
         <span class="comment"># 2. Zero-Shot Segmentation (PicoSAM)</span>
         mask = self.sam.run(<span class="keyword">None</span>, {<span class="string">"image_embeddings"</span>: feat})
         
-        <span class="comment"># 3. Decision Logic (Bangladeshi Cotton Standards)</span>
         <span class="keyword">return</span> {<span class="string">"defect"</span>: mask.mean() > 0.07}
                                     </pre>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
+                <!-- TOOL 02 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
-                        <div class="o-grid"> <div class="o-grid__col u-6/12@md">
+                        <div class="o-grid"> 
+                            <div class="o-grid__col u-6/12@md">
                                 <div class="c-code-wrapper" data-scroll data-scroll-speed="0.5">
                                     <pre class="c-code-block">
 <span class="keyword">class</span> <span class="function">PowerMonitor</span>:
@@ -164,9 +159,6 @@
         <span class="keyword">if</span> self.drift_detected(vec):
             self.update_memory_gate(vec)
 
-        <span class="comment"># 3. Bayesian Change Point Detection</span>
-        bkpts = rpt.Pelt(model=<span class="string">"rbf"</span>).fit(vec).predict(pen=3)
-        
         <span class="keyword">return</span> {
             <span class="string">"anomalies"</span>: len(bkpts),
             <span class="string">"cost_usd"</span>: self.calc_tariff(readings, grid=<span class="string">"PEAK"</span>)
@@ -180,39 +172,27 @@
                                     <span class="c-tag">Module 02</span>
                                     <h3 class="c-heading-large">PowerGuard</h3>
                                     <p class="c-text-body">
-                                        <strong>The Pulse.</strong> Treating electricity not as a monthly bill, but as a high-frequency time-series data stream.
+                                        <strong>The Pulse.</strong> Treating electricity not as a monthly bill, but as a high-frequency time-series data stream. Uses <strong>TS2Vec</strong> embeddings to predict spikes 180s before they trip the breaker.
                                     </p>
-                                    <p class="c-text-body">
-                                        Uses <strong>TS2Vec</strong> embeddings with a MOMEMTO memory gate to handle concept drift. It predicts spikes 180s before they trip the breaker, saving diesel generator costs.
-                                    </p>
-                                    <p class="c-text-small u-margin-top-small">
-                                        <em>Compliance:</em> Auto-generates EU CBAM "Green Certificates" (Parquet).
-                                    </p>
+                                    <a href="power-guard.html" class="c-button c-button--primary u-margin-top-medium">View Power Specs</a>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
+                <!-- TOOL 03 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
                         <div class="o-grid o-grid--reverse">
-                            
                             <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
                                 <div class="c-project__content">
                                     <span class="c-tag">Module 03</span>
                                     <h3 class="c-heading-large">FailPredict</h3>
                                     <p class="c-text-body">
-                                        <strong>The Ear.</strong> Listening to the heartbeat of the machine to predict a heart attack 5 hours before it happens.
+                                        <strong>The Ear.</strong> Listening to the heartbeat of the machine to predict a heart attack 5 hours before it happens. Vibration analysis using <strong>GRU-128</strong> neural networks.
                                     </p>
-                                    <p class="c-text-body">
-                                        Vibration analysis using <strong>GRU-128</strong> neural networks trained on NASA CMAPSS data, adapted for Juki sewing heads.
-                                    </p>
-                                    <ul class="c-list-clean u-margin-top-small">
-                                        <li>Green: RUL > 4 hours</li>
-                                        <li>Red: RUL < 1 hour (Critical Stop)</li>
-                                    </ul>
+                                    <a href="fail-predict.html" class="c-button c-button--primary u-margin-top-medium">View Vibration Specs</a>
                                 </div>
                             </div>
 
@@ -225,9 +205,6 @@
     
     <span class="comment"># GRU-128 Inference for RUL (Remaining Useful Life)</span>
     rul_hours = self.gru_model(vib_features)
-    
-    <span class="comment"># Physics-Informed Constraints (Pi-Transformer)</span>
-    rul_hours = self.apply_physics_constraints(rul_hours)
 
     <span class="keyword">return</span> {
         <span class="string">"rul_hours"</span>: round(rul_hours, 1),
@@ -236,7 +213,6 @@
                                     </pre>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
