@@ -1,7 +1,6 @@
 // assets/js/app.js
 
 // ── DEPENDENCIES (CDN) ───────────────────────────────────
-// We load SplitType for text manipulation and GSAP for the animation engine
 const deps = [
   'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
   'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js',
@@ -10,36 +9,32 @@ const deps = [
   'https://unpkg.com/split-type' 
 ];
 
+// OPTIMIZATION: Parallel script loading as requested
 async function loadScripts(urls) {
-  const promises = urls.map(url => {
-    return new Promise((resolve, reject) => {
+  return Promise.all(urls.map(url => 
+    new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${url}"]`)) {
-        resolve();
-        return;
+          resolve();
+          return;
       }
       const script = document.createElement('script');
       script.src = url;
-      script.async = true;
+      script.async = false; // Maintain execution order per requirements
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
-    });
-  });
-  return Promise.all(promises);
+    })
+  ));
 }
 
-// ── UTILS: Scramble Text Effect ──────────────────────────
-// Mimics the high-end "decoding" effect seen on the reference site
+// ── UTILS ────────────────────────────────────────────────
+
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
 
 function scrambleText(element, duration = 1) {
   const originalText = element.innerText;
   const length = originalText.length;
-  
-  // Create a timeline for this specific element
   const tl = gsap.timeline();
-  
-  // Object to tween
   const scrambleObj = { value: 0 };
   
   tl.to(scrambleObj, {
@@ -49,15 +44,12 @@ function scrambleText(element, duration = 1) {
     onUpdate: () => {
       const progress = scrambleObj.value;
       let result = "";
-      
       for (let i = 0; i < length; i++) {
-        // If we are past the progress point for this char, show original
         if (i / length < progress) {
           result += originalText[i];
         } else if (originalText[i] === " ") {
           result += " ";
         } else {
-          // Otherwise show random char
           result += chars[Math.floor(Math.random() * chars.length)];
         }
       }
@@ -68,11 +60,76 @@ function scrambleText(element, duration = 1) {
   return tl;
 }
 
+// Enhancement: Stats Counter Animation
+function animateStats() {
+  const animateValue = (el, start, end, duration) => {
+    const range = end - start;
+    const increment = range / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= end) {
+        el.textContent = end;
+        clearInterval(timer);
+      } else {
+        el.textContent = Math.floor(current);
+      }
+    }, 16);
+  };
+
+  document.querySelectorAll('.c-stat__value').forEach(stat => {
+    // Simple parsing to find the number in the string
+    const text = stat.textContent;
+    const number = parseInt(text.replace(/[^0-9]/g, ''));
+    
+    if (!isNaN(number)) {
+       ScrollTrigger.create({
+        trigger: stat,
+        start: 'top 80%',
+        scroller: '[data-scroll-container]', // Important for Locomotive
+        once: true,
+        onEnter: () => {
+          // Only animate if we extracted a valid number
+           stat.textContent = '0'; // Reset for animation
+           animateValue(stat, 0, number, 2000);
+           // Restore suffix if needed (basic implementation)
+           setTimeout(() => { stat.textContent = text; }, 2000);
+        }
+      });
+    }
+  });
+}
+
+// Enhancement: Code Copy Functionality
+function initCodeCopy() {
+    // Inject copy buttons if they don't exist
+    document.querySelectorAll('.c-code-wrapper').forEach((wrapper, index) => {
+        if(!wrapper.querySelector('.c-code-copy')) {
+            const btn = document.createElement('button');
+            btn.className = 'c-code-copy';
+            btn.textContent = 'Copy';
+            btn.dataset.copyTarget = `code-${index}`;
+            
+            const pre = wrapper.querySelector('pre');
+            if(pre) pre.id = `code-${index}`;
+            
+            wrapper.appendChild(btn);
+            
+            btn.addEventListener('click', () => {
+                const code = pre.textContent;
+                navigator.clipboard.writeText(code);
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            });
+        }
+    });
+}
+
 // ── MODULES ──────────────────────────────────────────────
 
 class Scroll {
   init() {
-    // Destroy existing instance if present (for Barba re-init)
     if (window.locoScroll) window.locoScroll.destroy();
 
     const scrollContainer = document.querySelector('[data-scroll-container]');
@@ -81,15 +138,14 @@ class Scroll {
     this.instance = new LocomotiveScroll({
       el: scrollContainer,
       smooth: true,
-      multiplier: 1.0, // Exact friction of original site
-      lerp: 0.1,       // "Heaviness" of the scroll (lower = heavier)
+      multiplier: 1.0, 
+      lerp: 0.1,
       smartphone: { smooth: true },
       tablet: { smooth: true }
     });
 
     window.locoScroll = this.instance;
 
-    // Sync ScrollTrigger with Locomotive Scroll
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.scrollerProxy(scrollContainer, {
       scrollTop(value) {
@@ -103,6 +159,28 @@ class Scroll {
 
     this.instance.on('scroll', ScrollTrigger.update);
     ScrollTrigger.refresh();
+    
+    // Enhancement: Parallax Hero
+    const hero = document.querySelector('.c-hero');
+    if (hero) {
+      this.instance.on('scroll', (args) => {
+        const progress = args.scroll.y / window.innerHeight;
+        hero.style.transform = `translateY(${progress * 30}%)`;
+        hero.style.opacity = 1 - progress * 0.8;
+      });
+    }
+    
+    // FIX: Scroll Anchors
+    document.querySelectorAll('[data-scroll-to]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        const target = document.querySelector(href);
+        if (target && window.locoScroll) {
+          window.locoScroll.scrollTo(target, { offset: -100, duration: 1200 });
+        }
+      });
+    });
   }
 }
 
@@ -113,21 +191,16 @@ class Header {
 
     let lastScroll = 0;
 
-    // Use Locomotive's scroll event for native-feeling nav hiding
     window.locoScroll.on('scroll', (args) => {
       const currentScroll = args.scroll.y;
       
       if (currentScroll > lastScroll && currentScroll > 100) {
-        // Scrolling Down -> Hide
         header.classList.add('is-hidden');
       } else {
-        // Scrolling Up -> Show
         header.classList.remove('is-hidden');
       }
       
-      // Solid background when not at top
       header.classList.toggle('is-scrolled', currentScroll > 50);
-      
       lastScroll = currentScroll;
     });
   }
@@ -135,12 +208,14 @@ class Header {
 
 class Load {
   init() {
+    // FIX: Robust Preloader Logic
     const preloader = document.querySelector('.c-preloader');
-    if (!preloader) return;
+    if (!preloader) {
+        document.documentElement.classList.remove('is-loading');
+        return;
+    }
 
     const text = preloader.querySelector('.c-preloader_text');
-    
-    // Scramble the loading text
     const tl = gsap.timeline();
     
     if (text) {
@@ -155,7 +230,7 @@ class Load {
             document.documentElement.classList.remove('is-loading');
             preloader.remove();
         }
-    });
+    }, "+=0.3"); // Add delay
   }
 }
 
@@ -165,18 +240,18 @@ document.documentElement.classList.remove('has-no-js');
 window.addEventListener('DOMContentLoaded', async () => {
   await loadScripts(deps);
   
-  // 1. Initialize Core Modules
   const scroll = new Scroll();
   const header = new Header();
   const loader = new Load();
 
+  // Init core
   scroll.init();
   loader.init();
+  initCodeCopy(); // Enhancement
+  animateStats(); // Enhancement
   
-  // Wait a moment for layout to settle before init header listeners
   setTimeout(() => header.init(), 100);
 
-  // 2. Initialize Barba for Page Transitions
   barba.init({
     sync: true,
     debug: true,
@@ -186,8 +261,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       
       async leave(data) {
         const done = this.async();
-        
-        // Animate out current container
         gsap.to(data.current.container, {
           opacity: 0,
           y: -50,
@@ -198,30 +271,24 @@ window.addEventListener('DOMContentLoaded', async () => {
       },
 
       async enter(data) {
-        // 1. Re-init Scroll on new page immediately
         scroll.init();
+        initCodeCopy(); // Re-init on new page
+        animateStats(); // Re-init stats
         
-        // 2. Scramble Effect on Hero Title of new page
         const heroTitle = data.next.container.querySelector('.c-hero__title');
         const nextContainer = data.next.container;
         
-        // Set initial state
         gsap.set(nextContainer, { opacity: 0, y: 50 });
         
-        // Animate In
         const tl = gsap.timeline();
         tl.to(nextContainer, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" });
         
         if(heroTitle) {
-            // Split text first to avoid layout shift during scramble
-            // Note: For simple scramble, we just target the element text content
             tl.add(scrambleText(heroTitle, 1.2), "-=0.6"); 
         }
         
-        // 3. Re-init header logic for new scroll instance
         header.init();
       }
     }]
   });
 });
-
