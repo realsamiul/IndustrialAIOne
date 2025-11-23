@@ -1,36 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<html lang="en" class="has-scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M0NARQ | The Tools</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <style>
-        /* Custom Code Block Styling for Deep Dives */
-        .c-tech-spec {
-            background: rgba(14, 27, 43, 0.95);
-            border: 1px solid rgba(0, 156, 166, 0.3);
-            color: #F7F9FA;
-            font-family: 'JetBrains Mono', monospace;
-            padding: 1.5rem;
-            font-size: 0.8rem;
-            line-height: 1.4;
-            margin-top: 1rem;
-        }
-        .c-tech-spec__label {
-            color: #009CA6;
-            text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 0.05em;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .u-text-teal { color: #009CA6; }
-    </style>
+    <link rel="stylesheet" href="assets/css/reduced.css">
 </head>
 <body data-barba="wrapper">
 
-    <header class="c-header" data-scroll-sticky data-scroll-target="#main">
+    <!-- PRELOADER -->
+    <div class="c-preloader">
+        <div class="c-preloader_text">Loading Modules...</div>
+    </div>
+
+    <header class="c-header">
         <div class="o-container">
             <div class="c-header__wrapper">
                 <a href="index.html" class="c-header__logo-text">M0NARQ</a>
@@ -68,16 +51,18 @@
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <figure class="c-media" data-scroll data-scroll-speed="-1">
-                                <div class="c-tech-spec">
-                                    <span class="c-tech-spec__label">Pipeline Architecture</span>
+                            <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="c-code-block" style="padding: 1.5rem;">
+                                    <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE ARCHITECTURE</span>
+                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Input: 224x224 RGB Stream<br>
                                     Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (28ms)<br>
                                     Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable)<br>
                                     Output: Binary Mask + Class<br>
                                     Hardware: RPi 5 / Android (Snapdragon)
+                                    </div>
                                 </div>
-                            </figure>
+                            </div>
                         </div>
 
                         <div class="o-grid__col u-5/12@md u-push-1/12@md" data-scroll data-scroll-speed="1">
@@ -87,7 +72,7 @@
                                 <strong>The Problem:</strong> Manual QC misses 3-5% of defects, costing the industry $390M/yr. Cloud solutions fail due to latency (>3s) and bandwidth costs.
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> A quantization-first approach. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains and needle holes in <90ms.
+                                <strong>The Fix:</strong> A quantization-first approach. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains and needle holes in &lt;90ms.
                             </p>
                             <div class="c-stats-grid u-margin-top-medium">
                                 <div class="c-stat">
@@ -99,7 +84,6 @@
                                     <span class="c-stat__label">Inference Time</span>
                                 </div>
                             </div>
-                            <!-- NAVIGATION LINK ADDED -->
                             <a href="qc-vision.html" class="c-button c-button--primary u-margin-top-medium">
                                 View Technical Spec
                             </a>
@@ -116,16 +100,18 @@
                     <div class="o-grid o-grid--middle o-grid--reverse">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <figure class="c-media" data-scroll data-scroll-speed="-1">
-                                <div class="c-tech-spec">
-                                    <span class="c-tech-spec__label">Data Stream Analysis</span>
+                            <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="c-code-block" style="padding: 1.5rem;">
+                                    <span class="c-heading-small" style="color: var(--color-accent-pg); display:block; margin-bottom:1rem; font-size:0.8rem;">DATA STREAM ANALYSIS</span>
+                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: PZEM-004T + ESP32 @ 1Hz<br>
-                                    Algorithm: <span class="u-text-teal">TS2Vec + MOMEMTO Gate</span><br>
+                                    Algorithm: <span style="color: var(--color-accent-pg);">TS2Vec + MOMEMTO Gate</span><br>
                                     Prediction: 4-Layer TCN Forecaster<br>
                                     Compliance: EU CBAM / DPP Parquet Log<br>
                                     Drift: Auto-calibration every 7 days
+                                    </div>
                                 </div>
-                            </figure>
+                            </div>
                         </div>
 
                         <div class="o-grid__col u-5/12@md u-pull-1/12@md" data-scroll data-scroll-speed="1">
@@ -147,7 +133,6 @@
                                     <span class="c-stat__label">Spike Warning</span>
                                 </div>
                             </div>
-                            <!-- NAVIGATION LINK ADDED -->
                             <a href="power-guard.html" class="c-button c-button--primary u-margin-top-medium">
                                 View Technical Spec
                             </a>
@@ -165,16 +150,18 @@
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <figure class="c-media" data-scroll data-scroll-speed="-1">
-                                <div class="c-tech-spec">
-                                    <span class="c-tech-spec__label">Vibration Analytics</span>
+                            <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
+                                <div class="c-code-block" style="padding: 1.5rem;">
+                                    <span class="c-heading-small" style="color: var(--color-accent-fp); display:block; margin-bottom:1rem; font-size:0.8rem;">VIBRATION ANALYTICS</span>
+                                    <div style="font-family: 'Sweet Sans Pro', monospace; font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: MPU-6050 (X,Y,Z Accel)<br>
-                                    Model: <span class="u-text-teal">GRU-128 (NASA CMAPSS)</span><br>
+                                    Model: <span style="color: var(--color-accent-fp);">GRU-128 (NASA CMAPSS)</span><br>
                                     Enhancement: Pi-Transformer Head<br>
                                     Output: RUL (Remaining Useful Life)<br>
                                     Alerts: Traffic Light (Green/Yellow/Red)
+                                    </div>
                                 </div>
-                            </figure>
+                            </div>
                         </div>
 
                         <div class="o-grid__col u-5/12@md u-push-1/12@md" data-scroll data-scroll-speed="1">
@@ -196,7 +183,6 @@
                                     <span class="c-stat__label">Year 1 ROI</span>
                                 </div>
                             </div>
-                            <!-- NAVIGATION LINK ADDED -->
                             <a href="fail-predict.html" class="c-button c-button--primary u-margin-top-medium">
                                 View Technical Spec
                             </a>
@@ -209,10 +195,10 @@
             <section class="c-section u-padding-vertical-xlarge u-bg-dark" data-scroll-section>
                 <div class="o-container u-text-center">
                     <h2 class="c-heading-large u-text-white" data-scroll data-scroll-speed="1">Deploy Tomorrow.</h2>
-                    <p class="c-text-body u-text-white u-opacity-70 u-margin-bottom-medium">
+                    <p class="c-text-body u-text-white u-opacity-70 u-margin-bottom-medium" style="margin: 0 auto 2rem auto;">
                         Complete source code and BOM available for investor review.
                     </p>
-                    <a href="mailto:invest@monarq.ai" class="c-button c-button--primary">
+                    <a href="mailto:invest@monarq.ai" class="c-button c-button--primary" style="border-color:white; color:white;">
                         Request The Deck
                     </a>
                 </div>
@@ -232,7 +218,8 @@
         </div>
     </main>
 
-    <script src="assets/js/vendors.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>
+
+
