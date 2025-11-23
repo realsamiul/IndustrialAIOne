@@ -1,52 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="is-smooth-scroll-compatible is-loading">
+<html lang="en" class="has-scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M0NARQ | Industrial-AI.One</title>
-    
-    <link rel="stylesheet" href="assets/css/main.css">
-    
-    <style>
-        /* Overrides to ensure Code Snippets match the high-end aesthetic 
-           (Glassmorphism / Industrial Dark Mode)
-        */
-        :root {
-            --color-code-bg: #0E1B2B; /* Loom Navy */
-            --color-accent: #009CA6;  /* Textile Teal */
-        }
-        
-        .c-code-block {
-            background: var(--color-code-bg);
-            border-left: 2px solid var(--color-accent);
-            padding: 2rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            color: #a9b7c6;
-            margin-top: 1rem;
-        }
-
-        .c-code-block .keyword { color: #cc7832; }
-        .c-code-block .string { color: #6a8759; }
-        .c-code-block .function { color: #ffc66d; }
-        .c-code-block .comment { color: #808080; }
-
-        /* Temporary Text Logo Styling */
-        .c-header__logo-text {
-            font-family: inherit;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 1.25rem;
-            color: currentColor;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/reduced.css">
 </head>
 <body data-barba="wrapper">
 
-    <header class="c-header" data-scroll-sticky data-scroll-target="#main">
+    <!-- PRELOADER -->
+    <div class="c-preloader">
+        <div class="c-preloader_text">Loading Intelligence...</div>
+    </div>
+
+    <header class="c-header">
         <div class="o-container">
             <div class="c-header__wrapper">
                 <a href="index.html" class="c-header__logo-text">M0NARQ</a>
@@ -84,10 +51,10 @@
                 <div class="o-container">
                     <div class="o-grid">
                         <div class="o-grid__col u-6/12@md">
-                            <h2 class="c-heading-medium">The Convergence of Crisis and Opportunity</h2>
+                            <h2 class="c-heading-medium" data-scroll>The Convergence of Crisis and Opportunity</h2>
                         </div>
                         <div class="o-grid__col u-6/12@md">
-                            <div class="c-text-body">
+                            <div class="c-text-body" data-scroll data-scroll-delay="0.1">
                                 <p>
                                     The global textile landscape is shifting. Bangladesh, the world's second-largest garment exporter, faces a perfect storm: <strong>US Tariff Volatility</strong>, the <strong>EU Green Deal (CBAM)</strong>, and a crippling <strong>Local Energy Crisis</strong>.
                                 </p>
@@ -223,25 +190,25 @@
                 <div class="o-container">
                     <div class="c-section-header u-margin-bottom-large">
                         <span class="c-tag">The Infrastructure</span>
-                        <h2 class="c-heading-medium">The Serverless Edge</h2>
+                        <h2 class="c-heading-medium u-text-white">The Serverless Edge</h2>
                     </div>
                     
                     <div class="o-grid">
                         <div class="o-grid__col u-4/12@md">
-                            <h4 class="c-heading-small">Modal.com Orchestration</h4>
-                            <p class="c-text-small">
-                                Scale-to-zero GPU usage. We pay only for the milliseconds of inference. 20k QC checks + 600k CPU calls for <$30/mo.
+                            <h4 class="c-heading-small u-text-white">Modal.com Orchestration</h4>
+                            <p class="c-text-small u-text-white u-opacity-70">
+                                Scale-to-zero GPU usage. We pay only for the milliseconds of inference. 20k QC checks + 600k CPU calls for &lt;$30/mo.
                             </p>
                         </div>
                         <div class="o-grid__col u-4/12@md">
-                            <h4 class="c-heading-small">Zero-Trust Privacy</h4>
-                            <p class="c-text-small">
+                            <h4 class="c-heading-small u-text-white">Zero-Trust Privacy</h4>
+                            <p class="c-text-small u-text-white u-opacity-70">
                                 Images never leave the factory RAM. Ephemeral tokens rotated every 24h. Local DuckDB storage.
                             </p>
                         </div>
                         <div class="o-grid__col u-4/12@md">
-                            <h4 class="c-heading-small">Federated Learning</h4>
-                            <p class="c-text-small">
+                            <h4 class="c-heading-small u-text-white">Federated Learning</h4>
+                            <p class="c-text-small u-text-white u-opacity-70">
                                 (Roadmap) Factories share gradients, not data. DP-SGD guarantees mathematical privacy while improving the "Industrial Brain."
                             </p>
                         </div>
@@ -285,7 +252,8 @@
         </div>
     </main>
 
-    <script src="assets/js/vendors.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>
+
+
