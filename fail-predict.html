@@ -8,6 +8,10 @@
 </head>
 <body data-barba="wrapper">
 
+    <div class="c-preloader">
+        <div class="c-preloader_text">Loading Harmonics...</div>
+    </div>
+
     <header class="c-header">
         <div class="o-container">
             <div class="c-header__wrapper">
@@ -23,10 +27,17 @@
         </div>
     </header>
 
-    <main class="o-scroll" id="main" data-barba="container" data-barba-namespace="detail">
+    <main class="o-scroll" id="main" data-barba="container" data-barba-namespace="detail-fp">
         <div data-scroll-container>
 
             <header class="c-hero" data-scroll-section>
+                <!-- Hero Visual 1 -->
+                <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
+                    <div class="c-image -cover u-inset">
+                        <img src="assets/images/fail-predict1.webp" class="c-image_img" alt="Machinery Vibration" style="opacity: 0.3;">
+                    </div>
+                </div>
+
                 <div class="o-container">
                     <div class="c-hero__content">
                         <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Module 03</span>
@@ -35,7 +46,7 @@
                         </h1>
                         <p class="c-hero__lead" data-scroll data-scroll-speed="1">
                             Condition-based predictive maintenance. Listening to machine health.<br>
-                            <span style="font-family: 'Sweet Sans Pro'; font-weight: 500; color: #E0E0E0;">5 Hour Warning. 9.2x ROI.</span>
+                            <span style="font-family: var(--font-tech); font-weight: 500; color: #E0E0E0;">5 Hour Warning. 9.2x ROI.</span>
                         </p>
                     </div>
                 </div>
@@ -43,11 +54,13 @@
 
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
-                    <div class="o-grid">
+                    <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-4/12@md">
                             <h2 class="c-heading-small">The Leakage</h2>
+                             <!-- Visual 2 -->
+                            <img src="assets/images/fail-predict2.webp" alt="Downtime Statistics" class="u-margin-top-small" style="width: 100%; border-radius: 4px;">
                         </div>
-                        <div class="o-grid__col u-8/12@md">
+                        <div class="o-grid__col u-7/12@md u-push-1/12@md">
                             <p class="c-text-body">
                                 Unplanned mechanical failure costs the sector <strong>$2.04B annually</strong>. Bearings seize, motors burn out, and lines stop. 
                             </p>
@@ -80,7 +93,7 @@
 
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-5/12@md">
-                            <ul style="list-style:none; padding:0;">
+                            <ul class="c-list-clean">
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Vibration Sensing</span>
                                     <p class="c-text-small" style="margin-top:0.5rem;">
@@ -103,8 +116,13 @@
                         </div>
 
                         <div class="o-grid__col u-7/12@md" data-scroll data-scroll-speed="1">
+                            <!-- Visual 3 -->
+                             <div class="u-margin-bottom-small">
+                                <img src="assets/images/fail-predict3.webp" alt="Vibration Sensor Data" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                            </div>
                             <div class="c-code-wrapper">
-                                <div class="c-code-block">
+                                <button class="c-code-copy" data-copy-target="code-fp">Copy</button>
+                                <pre class="c-code-block" id="code-fp">
 <span class="keyword">def</span> <span class="function">predict_rul</span>(sensor_data):
     <span class="comment"># 1. Load Pretrained GRU Model (NASA CMAPSS)</span>
     model = torch.load(<span class="string">"models/gru_rul.pt"</span>)
@@ -125,7 +143,7 @@
         status = <span class="string">"NORMAL"</span>
         
     <span class="keyword">return</span> {<span class="string">"rul_hours"</span>: round(rul_hours, <span class="number">2</span>), <span class="string">"status"</span>: status}
-                                </div>
+                                </pre>
                             </div>
                         </div>
                     </div>
@@ -179,7 +197,7 @@
                         <div class="o-grid__col u-4/12@md u-padding-left-large">
                             <div style="border:1px solid rgba(255,255,255,0.2); padding:1.5rem; border-radius:4px;">
                                 <span class="c-heading-small" style="font-size:0.75rem; text-transform:uppercase; color:#E0E0E0;">Pilot Result</span>
-                                <ul style="list-style:none; padding:0; margin-top:1rem; font-size:0.85rem; color:#fff;">
+                                <ul class="c-list-clean" style="margin-top:1rem; font-size:0.85rem; color:#fff;">
                                     <li style="margin-bottom:1rem;">
                                         <strong>Narayanganj Pilot:</strong><br>
                                         Reduced spindle downtime from 23h/mo to 9h/mo.
@@ -210,4 +228,3 @@
     <script src="assets/js/app.js"></script>
 </body>
 </html>
-
