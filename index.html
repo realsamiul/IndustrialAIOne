@@ -31,7 +31,15 @@
     <main class="o-scroll" id="main" data-barba="container" data-barba-namespace="home">
         <div data-scroll-container>
 
+            <!-- HERO -->
             <section class="c-hero" data-scroll-section>
+                <!-- Hero Visual 1 -->
+                <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
+                    <div class="c-image -cover u-inset">
+                        <img src="assets/images/index1.webp" class="c-image_img" alt="Industrial Textile Floor" style="opacity: 0.3;">
+                    </div>
+                </div>
+                
                 <div class="o-container">
                     <div class="c-hero__content">
                         <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Framework 2025-2026</span>
@@ -47,13 +55,19 @@
                 </div>
             </section>
 
+            <!-- CRISIS SECTION -->
             <section id="crisis" class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
-                    <div class="o-grid">
+                    <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-6/12@md">
                             <h2 class="c-heading-medium" data-scroll>The Convergence of Crisis and Opportunity</h2>
+                            <div class="c-image u-margin-top-medium" data-scroll data-scroll-speed="1">
+                                <!-- Visual 2 -->
+                                <img src="assets/images/index2.webp" alt="Factory Crisis Data Visualization" style="border-radius: 4px; opacity: 0.8;">
+                                <p class="c-text-small u-margin-top-small" style="opacity: 0.5;">Figure 1: The Efficiency Gap</p>
+                            </div>
                         </div>
-                        <div class="o-grid__col u-6/12@md">
+                        <div class="o-grid__col u-5/12@md u-push-1/12@md">
                             <div class="c-text-body" data-scroll data-scroll-delay="0.1">
                                 <p>
                                     The global textile landscape is shifting. Bangladesh, the world's second-largest garment exporter, faces a perfect storm: <strong>US Tariff Volatility</strong>, the <strong>EU Green Deal (CBAM)</strong>, and a crippling <strong>Local Energy Crisis</strong>.
@@ -61,11 +75,16 @@
                                 <p>
                                     The "Industry 4.0" cloud model—high latency, privacy risks, and $12k CAPEX rigs—is broken. We propose a "Retrofit Innovation": $9 sensors, recycled smartphones, and <strong>Edge-Native AI</strong>.
                                 </p>
-                                <ul class="c-stats-list u-margin-top-medium">
-                                    <li><strong>$390M</strong> Lost to Fabric Defects</li>
-                                    <li><strong>$281M</strong> Wasted Energy</li>
-                                    <li><strong>$2.04B</strong> Unplanned Downtime</li>
-                                </ul>
+                                <div class="c-stats-grid">
+                                    <div class="c-stat">
+                                        <span class="c-stat__value">$390M</span>
+                                        <span class="c-stat__label">Lost to Defects</span>
+                                    </div>
+                                    <div class="c-stat">
+                                        <span class="c-stat__value">$2.04B</span>
+                                        <span class="c-stat__label">Unplanned Downtime</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -77,8 +96,8 @@
                 <!-- TOOL 01 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
-                        <div class="o-grid o-grid--reverse"> 
-                            <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
+                        <div class="o-grid o-grid--reverse o-grid--middle"> 
+                            <div class="o-grid__col u-5/12@md" data-scroll data-scroll-speed="1">
                                 <div class="c-project__content">
                                     <span class="c-tag">Module 01</span>
                                     <h3 class="c-heading-large">QC Vision</h3>
@@ -90,9 +109,13 @@
                                 </div>
                             </div>
 
-                            <div class="o-grid__col u-6/12@md">
+                            <div class="o-grid__col u-6/12@md u-pull-1/12@md">
+                                <!-- Visual 3 -->
                                 <div class="c-code-wrapper" data-scroll data-scroll-speed="0.5">
-                                    <pre class="c-code-block">
+                                    <div class="u-margin-bottom-small">
+                                        <img src="assets/images/index3.webp" alt="QC Vision Inference" style="width: 100%; border-radius: 4px; opacity: 0.8;">
+                                    </div>
+                                    <div class="c-code-block">
 <span class="keyword">class</span> <span class="function">DefectDetector</span>:
     <span class="keyword">def</span> <span class="function">predict</span>(self, jpg_bytes):
         <span class="comment"># 1. Preprocess & Feature Extraction</span>
@@ -103,7 +126,7 @@
         mask = self.sam.run(<span class="keyword">None</span>, {<span class="string">"image_embeddings"</span>: feat})
         
         <span class="keyword">return</span> {<span class="string">"defect"</span>: mask.mean() > 0.07}
-                                    </pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,10 +136,14 @@
                 <!-- TOOL 02 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
-                        <div class="o-grid"> 
+                        <div class="o-grid o-grid--middle"> 
                             <div class="o-grid__col u-6/12@md">
+                                <!-- Visual 4 -->
                                 <div class="c-code-wrapper" data-scroll data-scroll-speed="0.5">
-                                    <pre class="c-code-block">
+                                    <div class="u-margin-bottom-small">
+                                        <img src="assets/images/index4.webp" alt="PowerGuard Analysis" style="width: 100%; border-radius: 4px; opacity: 0.8;">
+                                    </div>
+                                    <div class="c-code-block">
 <span class="keyword">class</span> <span class="function">PowerMonitor</span>:
     <span class="keyword">def</span> <span class="function">analyze_power</span>(self, readings):
         <span class="comment"># 1. Vectorize Time-Series (TS2Vec)</span>
@@ -128,14 +155,14 @@
 
         <span class="keyword">return</span> {
             <span class="string">"anomalies"</span>: len(bkpts),
-            <span class="string">"cost_usd"</span>: self.calc_tariff(readings, grid=<span class="string">"PEAK"</span>)
+            <span class="string">"cost_usd"</span>: self.calc_tariff(readings)
         }
-                                    </pre>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
-                                <div class="c-project__content u-padding-left-medium">
+                            <div class="o-grid__col u-5/12@md u-push-1/12@md" data-scroll data-scroll-speed="1">
+                                <div class="c-project__content">
                                     <span class="c-tag">Module 02</span>
                                     <h3 class="c-heading-large">PowerGuard</h3>
                                     <p class="c-text-body">
@@ -151,8 +178,8 @@
                 <!-- TOOL 03 PREVIEW -->
                 <div class="c-project-item u-padding-vertical-large">
                     <div class="o-container">
-                        <div class="o-grid o-grid--reverse">
-                            <div class="o-grid__col u-6/12@md" data-scroll data-scroll-speed="1">
+                        <div class="o-grid o-grid--reverse o-grid--middle">
+                            <div class="o-grid__col u-5/12@md" data-scroll data-scroll-speed="1">
                                 <div class="c-project__content">
                                     <span class="c-tag">Module 03</span>
                                     <h3 class="c-heading-large">FailPredict</h3>
@@ -163,9 +190,13 @@
                                 </div>
                             </div>
 
-                            <div class="o-grid__col u-6/12@md">
+                            <div class="o-grid__col u-6/12@md u-pull-1/12@md">
+                                <!-- Visual 5 -->
                                 <div class="c-code-wrapper" data-scroll data-scroll-speed="0.5">
-                                    <pre class="c-code-block">
+                                    <div class="u-margin-bottom-small">
+                                        <img src="assets/images/index5.webp" alt="FailPredict Vibration Data" style="width: 100%; border-radius: 4px; opacity: 0.8;">
+                                    </div>
+                                    <div class="c-code-block">
 <span class="keyword">def</span> <span class="function">predict_failure</span>(self, sensor_data):
     <span class="comment"># Vibration (X,Y,Z) -> Feature Extraction</span>
     vib_features = self.extract_spectral(sensor_data)
@@ -175,9 +206,9 @@
 
     <span class="keyword">return</span> {
         <span class="string">"rul_hours"</span>: round(rul_hours, 1),
-        <span class="string">"action"</span>: <span class="string">"MAINTAIN_NOW"</span> <span class="keyword">if</span> rul_hours < 4 <span class="keyword">else</span> <span class="string">"MONITOR"</span>
+        <span class="string">"action"</span>: <span class="string">"MAINTAIN_NOW"</span> <span class="keyword">if</span> rul < 4 <span class="keyword">else</span> <span class="string">"MONITOR"</span>
     }
-                                    </pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +246,9 @@
                     </div>
 
                     <div class="u-margin-top-large">
-                        <pre class="c-code-block">
+                        <div class="c-code-wrapper">
+                            <button class="c-code-copy" data-copy-target="code-arch">Copy</button>
+                            <pre class="c-code-block" id="code-arch">
 <span class="keyword">@app.cls</span>(
     image=gpu_img,
     gpu=<span class="string">"T4"</span>,          <span class="comment"># Cost-effective T4 vs A100</span>
@@ -226,7 +259,8 @@
     <span class="keyword">def</span> <span class="function">sync_gradients</span>(self, local_update):
         <span class="comment"># Secure Aggregation for Federated Learning</span>
         <span class="keyword">return</span> self.global_model.update(local_update)
-                        </pre>
+                            </pre>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -255,5 +289,3 @@
     <script src="assets/js/app.js"></script>
 </body>
 </html>
-
-
