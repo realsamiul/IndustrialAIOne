@@ -11,23 +11,45 @@ const deps = [
 ];
 
 async function loadScripts(urls) {
-  return Promise.all(urls.map(url => 
-    new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src="${url}"]`)) return resolve();
-      const script = document.createElement('script');
-      script.src = url;
-      script.async = false;
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    })
-  ));
+  try {
+    return await Promise.all(urls.map(url => 
+      new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${url}"]`)) return resolve();
+        const script = document.createElement('script');
+        script.src = url;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Failed to load: ${url}`));
+        document.head.appendChild(script);
+      })
+    ));
+  } catch (error) {
+    console.error('Script loading failed:', error);
+    document.documentElement.classList.remove('is-loading');
+    throw error;
+  }
+}
+
+// ── UTILITIES ────────────────────────────────────────────
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 // ── SCRAMBLE TEXT EFFECT ─────────────────────────────────
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 function scrambleText(element, duration = 1) {
+  if (!element) return;
+  
   const originalText = element.textContent.trim();
   const length = originalText.length;
   const scrambleObj = { value: 0 };
@@ -60,51 +82,129 @@ function scrambleText(element, duration = 1) {
 // ── MODULES ──────────────────────────────────────────────
 
 class Scroll {
+  constructor() {
+    this.instance = null;
+    this.scrollContainer = null;
+    this.scrollHandlers = [];
+  }
+
   init() {
+    // Clean up any existing instance
     if (window.locoScroll) {
       window.locoScroll.destroy();
     }
 
-    const scrollContainer = document.querySelector('[data-scroll-container]');
-    if (!scrollContainer) return;
+    this.scrollContainer = document.querySelector('[data-scroll-container]');
+    if (!this.scrollContainer) {
+      console.warn('No scroll container found');
+      return;
+    }
 
+    // Initialize with better momentum settings
     this.instance = new LocomotiveScroll({
-      el: scrollContainer,
+      el: this.scrollContainer,
       smooth: true,
-      multiplier: 1.0,
-      lerp: 0.1,
-      smartphone: { smooth: true },
-      tablet: { smooth: true }
+      multiplier: 1.2,  // Increased for more momentum
+      lerp: 0.06,       // Decreased for smoother, longer scroll
+      class: 'is-inview',
+      offset: ['30%', 0],
+      repeat: false,
+      firefoxMultiplier: 100,
+      touchMultiplier: 3,
+      scrollFromAnywhere: true,
+      smartphone: {
+        smooth: true,
+        direction: 'vertical',
+        multiplier: 2.5,
+        lerp: 0.1,
+        class: 'is-inview',
+        offset: ['20%', 0]
+      },
+      tablet: {
+        smooth: true,
+        direction: 'vertical',
+        multiplier: 2.0,
+        lerp: 0.08,
+        class: 'is-inview',
+        offset: ['20%', 0]
+      }
     });
 
     window.locoScroll = this.instance;
 
-    // Sync with ScrollTrigger
+    // Better ScrollTrigger sync
+    this.syncScrollTrigger();
+    
+    // Initialize anchor scrolling
+    this.initScrollAnchors();
+    
+    // Update on images load
+    this.updateOnImagesLoad();
+  }
+
+  syncScrollTrigger() {
     gsap.registerPlugin(ScrollTrigger);
     
-    ScrollTrigger.scrollerProxy(scrollContainer, {
-      scrollTop(value) {
+    ScrollTrigger.scrollerProxy(this.scrollContainer, {
+      scrollTop: (value) => {
         return arguments.length 
-          ? window.locoScroll.scrollTo(value, 0, 0) 
-          : window.locoScroll.scroll.instance.scroll.y;
+          ? this.instance.scrollTo(value, 0, 0) 
+          : this.instance.scroll.instance.scroll.y;
       },
       getBoundingClientRect() {
         return {
-          top: 0, 
-          left: 0, 
-          width: window.innerWidth, 
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
           height: window.innerHeight
         };
       },
-      pinType: scrollContainer.style.transform ? "transform" : "fixed"
+      pinType: this.scrollContainer.style.transform ? "transform" : "fixed"
     });
 
-    this.instance.on('scroll', ScrollTrigger.update);
-    ScrollTrigger.addEventListener('refresh', () => this.instance.update());
+    const scrollHandler = ScrollTrigger.update;
+    this.instance.on('scroll', scrollHandler);
+    this.scrollHandlers.push(scrollHandler);
+    
+    ScrollTrigger.addEventListener('refresh', () => {
+      if (this.instance) this.instance.update();
+    });
+    
+    ScrollTrigger.defaults({ scroller: this.scrollContainer });
     ScrollTrigger.refresh();
+  }
 
-    // Scroll Anchor Links
-    this.initScrollAnchors();
+  updateOnImagesLoad() {
+    const images = this.scrollContainer.querySelectorAll('img');
+    let loadedCount = 0;
+    
+    const updateScroll = () => {
+      if (this.instance) {
+        this.instance.update();
+        ScrollTrigger.refresh();
+      }
+    };
+
+    if (images.length === 0) {
+      updateScroll();
+      return;
+    }
+    
+    images.forEach(img => {
+      if (img.complete) {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          updateScroll();
+        }
+      } else {
+        img.addEventListener('load', () => {
+          loadedCount++;
+          if (loadedCount === images.length) {
+            updateScroll();
+          }
+        }, { once: true });
+      }
+    });
   }
 
   initScrollAnchors() {
@@ -114,8 +214,8 @@ class Scroll {
         const targetId = link.getAttribute('href');
         const target = document.querySelector(targetId);
         
-        if (target && window.locoScroll) {
-          window.locoScroll.scrollTo(target, {
+        if (target && this.instance) {
+          this.instance.scrollTo(target, {
             offset: -100,
             duration: 1200,
             easing: [0.25, 0.0, 0.35, 1.0]
@@ -126,36 +226,58 @@ class Scroll {
   }
 
   destroy() {
+    // Clean up event listeners
+    this.scrollHandlers.forEach(handler => {
+      if (this.instance) {
+        this.instance.off('scroll', handler);
+      }
+    });
+    this.scrollHandlers = [];
+    
     if (window.locoScroll) {
       window.locoScroll.destroy();
       window.locoScroll = null;
     }
+    
+    if (this.instance) {
+      this.instance.destroy();
+      this.instance = null;
+    }
+    
     ScrollTrigger.getAll().forEach(t => t.kill());
+    ScrollTrigger.clearMatchMedia();
+    ScrollTrigger.clearScrollMemory();
   }
 }
 
 class Header {
+  constructor() {
+    this.header = null;
+    this.lastScroll = 0;
+    this.scrollHandler = null;
+  }
+
   init() {
-    const header = document.querySelector('.c-header');
-    if (!header || !window.locoScroll) return;
+    this.header = document.querySelector('.c-header');
+    if (!this.header || !window.locoScroll) return;
 
-    let lastScroll = 0;
-
-    window.locoScroll.on('scroll', (args) => {
+    this.scrollHandler = (args) => {
       const currentScroll = args.scroll.y;
       
       // Hide on scroll down, show on scroll up
-      if (currentScroll > lastScroll && currentScroll > 100) {
-        header.classList.add('is-hidden');
+      if (currentScroll > this.lastScroll && currentScroll > 100) {
+        this.header.classList.add('is-hidden');
       } else {
-        header.classList.remove('is-hidden');
+        this.header.classList.remove('is-hidden');
       }
       
       // Add background when scrolled
-      header.classList.toggle('is-scrolled', currentScroll > 50);
+      this.header.classList.toggle('is-scrolled', currentScroll > 50);
       
-      lastScroll = currentScroll;
-    });
+      this.lastScroll = currentScroll;
+    };
+
+    window.locoScroll.on('scroll', this.scrollHandler);
 
     // Active nav state
     this.updateActiveNav();
@@ -172,6 +294,12 @@ class Header {
       }
     });
   }
+
+  destroy() {
+    if (window.locoScroll && this.scrollHandler) {
+      window.locoScroll.off('scroll', this.scrollHandler);
+    }
+  }
 }
 
 class Preloader {
@@ -179,7 +307,7 @@ class Preloader {
     const preloader = document.querySelector('.c-preloader');
     if (!preloader) {
       document.documentElement.classList.remove('is-loading');
-      return;
+      return Promise.resolve();
     }
 
     const text = preloader.querySelector('.c-preloader_text');
@@ -207,27 +335,37 @@ class Preloader {
 }
 
 class Animations {
+  constructor() {
+    this.scrollTriggers = [];
+  }
+
   init() {
     // Animate stats counters
     this.animateStats();
     
-    // Parallax hero
-    this.heroParallax();
+    // NO HERO PARALLAX - Removed to prevent sliding under
+    // this.heroParallax(); // REMOVED
     
     // Code copy buttons
     this.initCodeCopy();
+    
+    // Add fade in animations
+    this.initFadeAnimations();
   }
 
   animateStats() {
+    const scrollContainer = document.querySelector('[data-scroll-container]');
+    if (!scrollContainer) return;
+    
     document.querySelectorAll('.c-stat__value').forEach(stat => {
       const text = stat.textContent.trim();
       const hasNumber = /\d/.test(text);
       
       if (!hasNumber) return;
 
-      ScrollTrigger.create({
+      const trigger = ScrollTrigger.create({
         trigger: stat,
-        scroller: '[data-scroll-container]',
+        scroller: scrollContainer,
         start: 'top 80%',
         once: true,
         onEnter: () => {
@@ -252,27 +390,40 @@ class Animations {
           });
         }
       });
+      
+      this.scrollTriggers.push(trigger);
     });
   }
 
-  heroParallax() {
-    const hero = document.querySelector('.c-hero');
-    if (!hero || !window.locoScroll) return;
+  initFadeAnimations() {
+    const scrollContainer = document.querySelector('[data-scroll-container]');
+    if (!scrollContainer) return;
 
-    window.locoScroll.on('scroll', (args) => {
-      const progress = args.scroll.y / window.innerHeight;
-      if (progress <= 1) {
-        gsap.to(hero, {
-          y: progress * 150,
-          opacity: Math.max(0.2, 1 - progress * 0.8),
-          duration: 0
-        });
-      }
+    // Fade in elements with data-fade attribute
+    document.querySelectorAll('[data-fade]').forEach(el => {
+      gsap.set(el, { opacity: 0, y: 30 });
+      
+      const trigger = ScrollTrigger.create({
+        trigger: el,
+        scroller: scrollContainer,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out"
+          });
+        }
+      });
+      
+      this.scrollTriggers.push(trigger);
     });
   }
 
   initCodeCopy() {
-    document.querySelectorAll('.c-code-block').forEach((block, index) => {
+    document.querySelectorAll('.c-code-block').forEach((block) => {
       // Add copy button
       const wrapper = block.closest('.c-code-wrapper');
       if (!wrapper || wrapper.querySelector('.c-code-copy')) return;
@@ -294,6 +445,8 @@ class Animations {
           setTimeout(() => {
             btn.querySelector('span').textContent = 'Copy';
           }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy:', err);
         });
       });
 
@@ -301,11 +454,21 @@ class Animations {
       wrapper.appendChild(btn);
     });
   }
+
+  destroy() {
+    this.scrollTriggers.forEach(trigger => trigger.kill());
+    this.scrollTriggers = [];
+  }
 }
 
 // ── BARBA PAGE TRANSITIONS ──────────────────────────────
 
 function initBarba() {
+  if (typeof barba === 'undefined') {
+    console.warn('Barba.js not loaded');
+    return;
+  }
+
   barba.init({
     sync: true,
     debug: false,
@@ -331,9 +494,21 @@ function initBarba() {
         // Scroll to top
         window.scrollTo(0, 0);
         
+        // Destroy previous instances
+        if (window.scrollInstance) {
+          window.scrollInstance.destroy();
+        }
+        if (window.headerInstance) {
+          window.headerInstance.destroy();
+        }
+        if (window.animationsInstance) {
+          window.animationsInstance.destroy();
+        }
+        
         // Re-initialize scroll
         const scroll = new Scroll();
         scroll.init();
+        window.scrollInstance = scroll;
         
         // Animate in
         const container = data.next.container;
@@ -355,15 +530,26 @@ function initBarba() {
           tl.add(scrambleText(heroTitle, 1.2), "-=0.4");
         }
         
-        // Re-init modules
-        const header = new Header();
-        header.init();
-        
-        const animations = new Animations();
-        animations.init();
+        // Re-init modules with delay
+        setTimeout(() => {
+          const header = new Header();
+          header.init();
+          window.headerInstance = header;
+          
+          const animations = new Animations();
+          animations.init();
+          window.animationsInstance = animations;
+        }, 100);
         
         // Update page class
         document.body.className = data.next.namespace || '';
+      },
+
+      async beforeLeave() {
+        // Clean up before leaving
+        if (window.animationsInstance) {
+          window.animationsInstance.destroy();
+        }
       }
     }]
   });
@@ -377,42 +563,76 @@ window.addEventListener('DOMContentLoaded', async () => {
     await loadScripts(deps);
   } catch (error) {
     console.error('Failed to load dependencies:', error);
+    // Continue with basic functionality
+    return;
+  }
+
+  // Wait for GSAP to be ready
+  if (typeof gsap === 'undefined') {
+    console.error('GSAP failed to load');
     document.documentElement.classList.remove('is-loading');
     return;
   }
 
   // Initialize core modules
-  const preloader = new Preloader();
-  await preloader.init();
+  try {
+    const preloader = new Preloader();
+    await preloader.init();
 
-  const scroll = new Scroll();
-  scroll.init();
+    const scroll = new Scroll();
+    scroll.init();
+    window.scrollInstance = scroll;
 
-  const header = new Header();
-  setTimeout(() => header.init(), 100);
+    // Delay header init to ensure scroll is ready
+    setTimeout(() => {
+      const header = new Header();
+      header.init();
+      window.headerInstance = header;
+    }, 100);
 
-  const animations = new Animations();
-  animations.init();
+    const animations = new Animations();
+    animations.init();
+    window.animationsInstance = animations;
 
-  // Initialize Barba
-  initBarba();
+    // Initialize Barba
+    initBarba();
+  } catch (error) {
+    console.error('Initialization error:', error);
+    document.documentElement.classList.remove('is-loading');
+  }
 });
 
 // Handle page visibility
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && window.locoScroll) {
-    window.locoScroll.update();
+    requestAnimationFrame(() => {
+      window.locoScroll.update();
+      ScrollTrigger.refresh();
+    });
   }
 });
 
-// Resize handler
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (window.locoScroll) {
-      window.locoScroll.update();
-    }
+// Optimized resize handler
+const handleResize = debounce(() => {
+  if (window.locoScroll) {
+    window.locoScroll.update();
+  }
+  if (typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.refresh();
-  }, 250);
+  }
+}, 300);
+
+window.addEventListener('resize', handleResize);
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  if (window.scrollInstance) {
+    window.scrollInstance.destroy();
+  }
+  if (window.headerInstance) {
+    window.headerInstance.destroy();
+  }
+  if (window.animationsInstance) {
+    window.animationsInstance.destroy();
+  }
 });
