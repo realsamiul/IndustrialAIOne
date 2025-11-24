@@ -1154,3 +1154,65 @@ h1, h2, h3, h4, h5, h6, .c-heading {
 .c-section .c-image img {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
+/* =========================================
+   HERO LAYOUT RESTRUCTURE PATCH
+   1. Moves text below image
+   2. Disables aggressive scroll animations
+   ========================================= */
+
+/* --- 1. SEPARATE IMAGE & TEXT --- */
+
+/* Change Hero from a background container to a stacked flex column */
+.c-hero, 
+.c-hero--small {
+    display: flex !important;
+    flex-direction: column;
+    min-height: auto !important; /* Remove forced viewport height */
+    height: auto !important;
+    padding-top: var(--header-height);
+}
+
+/* Force the background image wrapper to be a static block element */
+.c-hero__background {
+    position: relative !important; /* No longer absolute */
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 65vh; /* Takes up top 65% of screen. Adjust as needed. */
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Ensure the image itself covers this new area */
+.c-hero__background img,
+.c-image.-cover img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1 !important; /* Ensure crispness */
+}
+
+/* Style the text container to sit naturally below the image */
+.c-hero .o-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding-top: 3rem;    /* Space between image and text */
+    padding-bottom: 3rem; /* Space before next section */
+}
+
+/* --- 2. DISABLE AGGRESSIVE TEXT ANIMATIONS --- */
+
+/* This overrides the Locomotive Scroll JS transforms (data-scroll-speed).
+   It stops the text from floating/moving at different speeds.
+*/
+.c-hero__content,
+.c-hero__eyebrow,
+.c-hero__title,
+.c-hero__lead {
+    transform: none !important; 
+    opacity: 1 !important; /* Ensures text is visible even if JS faded it out */
+}
