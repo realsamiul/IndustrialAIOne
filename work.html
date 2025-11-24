@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M0NARQ | The Tools</title>
+    <title>M0NARQ | The Platform</title>
     <link rel="stylesheet" href="assets/css/reduced.css">
 </head>
 <body data-barba="wrapper">
 
+    <!-- PRELOADER -->
     <div class="c-preloader">
-        <div class="c-preloader__text">Deploying Assets...</div>
+        <div class="c-preloader__text">Loading Ecosystem...</div>
     </div>
 
     <header class="c-header">
@@ -39,7 +40,7 @@
 
                 <div class="o-container">
                     <div class="c-hero__content">
-                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Product Suite</span>
+                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">The Solution Stack</span>
                         <h1 class="c-hero__title" data-scroll data-scroll-speed="1.2">
                             Edge-Native<br>Intelligence
                         </h1>
@@ -47,7 +48,7 @@
                             Three drop-in AI modules. Zero cloud dependency.
                             <br><strong>$150 Hardware BOM*. 47-day ROI.</strong>
                             <br><br>
-                            <em style="font-size: 0.7em; opacity: 0.6; display:block;">*BOM (Bill of Materials): The total cost of the raw components required to build the system.</em>
+                            <em style="font-size: 0.7em; opacity: 0.6; display:block;">*BOM (Bill of Materials): The total cost of the raw components required to build the system (Raspberry Pi, Sensors, Casings).</em>
                         </p>
                     </div>
                 </div>
@@ -64,12 +65,12 @@
                                     <img src="qc-vision1.webp" alt="MicroViT Neural Architecture" style="width: 100%; border-radius: 4px; opacity: 0.9;">
                                 </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
-                                    <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE SPEC</span>
+                                    <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE ARCHITECTURE</span>
                                     <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
-                                    Input: 224x224 RGB Stream<br>
-                                    Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (28ms)<br>
-                                    Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable)<br>
-                                    Output: Binary Mask + Export Class<br>
+                                    Input: 224x224 RGB Stream (25fps)<br>
+                                    Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (9ms Latency)<br>
+                                    Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable Segmentation)<br>
+                                    Output: Binary Mask + JSON Meta<br>
                                     Hardware: RPi 5 / Android (Snapdragon)
                                     </div>
                                 </div>
@@ -83,12 +84,22 @@
                                 <strong>The Leakage:</strong> Manual QC misses 3-5% of defects, costing the industry $390M/yr. Cloud solutions fail due to latency (>3s) and bandwidth costs.
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> A quantization-first approach*. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains in &lt;90ms.
+                                <strong>The Fix:</strong> A quantization-first approach*. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains and needle holes in &lt;90ms.
                                 <br><br>
                                 <em style="font-size: 0.75em; opacity: 0.6;">*Quantization: Compressing an AI model to make it run faster on cheap hardware without losing significant accuracy.</em>
                             </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">38%</span>
+                                    <span class="c-stat__label">Defect Reduction</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">9ms</span>
+                                    <span class="c-stat__label">Inference Time</span>
+                                </div>
+                            </div>
                             <a href="qc-vision.html" class="c-button c-button--primary u-margin-top-medium">
-                                Technical Spec
+                                Technical Whitepaper
                             </a>
                         </div>
                     </div>
@@ -127,12 +138,22 @@
                                 <strong>The Leakage:</strong> Energy is 15% of production cost. Grid instability forces reliance on expensive diesel ($0.32/kWh).
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> We treat power as a high-frequency time series. The system predicts spikes 180 seconds in advance, allowing for automated "Peak Shaving"* of non-critical loads.
+                                <strong>The Fix:</strong> We treat power as a high-frequency time series. The system learns the "heartbeat" of a dye line and predicts spikes 180 seconds before they happen, allowing for automated "Peak Shaving"*.
                                 <br><br>
                                 <em style="font-size: 0.75em; opacity: 0.6;">*Peak Shaving: Reducing power usage during expensive peak-tariff hours to avoid penalties.</em>
                             </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">15%</span>
+                                    <span class="c-stat__label">Energy Saved</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">180s</span>
+                                    <span class="c-stat__label">Spike Warning</span>
+                                </div>
+                            </div>
                             <a href="power-guard.html" class="c-button c-button--primary u-margin-top-medium">
-                                Technical Spec
+                                Technical Whitepaper
                             </a>
                         </div>
 
@@ -176,10 +197,21 @@
                                 <br><br>
                                 <em style="font-size: 0.75em; opacity: 0.6;">*FFT (Fast Fourier Transform): A mathematical method to break down a vibration signal into its component frequencies to find faults.</em>
                             </p>
+                            <div class="c-stats-grid u-margin-top-medium">
+                                <div class="c-stat">
+                                    <span class="c-stat__value">5hr</span>
+                                    <span class="c-stat__label">Failure Horizon</span>
+                                </div>
+                                <div class="c-stat">
+                                    <span class="c-stat__value">9.2x</span>
+                                    <span class="c-stat__label">Year 1 ROI</span>
+                                </div>
+                            </div>
                             <a href="fail-predict.html" class="c-button c-button--primary u-margin-top-medium">
-                                Technical Spec
+                                Technical Whitepaper
                             </a>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -189,16 +221,16 @@
                 <div class="o-container">
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-5/12@md">
-                             <h2 class="c-heading-small">The Brain</h2>
+                             <h2 class="c-heading-small">The Edge Brain</h2>
                             <img src="work2.webp" alt="Raspberry Pi 5 Industrial Node" style="width: 100%; border-radius: 4px;">
                         </div>
                         <div class="o-grid__col u-6/12@md u-push-1/12@md">
-                             <h3 class="c-heading-medium">The Edge Node</h3>
+                             <h3 class="c-heading-medium">Compute Sovereignty</h3>
                              <p class="c-text-body">
                                  This is a <strong>Raspberry Pi 5</strong>. It costs $90 USD. It contains a quad-core 2.4GHz processor capable of running our 8-bit quantized AI models locally.
                              </p>
                              <p class="c-text-body">
-                                 By moving the "Brain" to the machine edge, we eliminate the need for expensive servers and guarantee data privacy—images are processed in RAM and never leave the factory floor.
+                                 By moving the "Brain" to the machine edge, we eliminate the need for expensive on-premise servers and guarantee data privacy—images are processed in RAM and never leave the factory floor, satisfying strict EU GDPR requirements.
                              </p>
                         </div>
                     </div>
