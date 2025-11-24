@@ -86,14 +86,12 @@ class Scroll {
     this.instance = null;
     this.scrollContainer = null;
     this.scrollHandlers = [];
+    this.resizeObserver = null;
   }
 
   init() {
     // Clean up any existing instance
-    if (window.locoScroll) {
-      window.locoScroll.destroy();
-      window.locoScroll = null;
-    }
+    this.destroy();
 
     this.scrollContainer = document.querySelector('[data-scroll-container]');
     if (!this.scrollContainer) {
@@ -101,53 +99,67 @@ class Scroll {
       return;
     }
 
+    // Ensure container is visible
+    this.scrollContainer.style.visibility = 'visible';
+    this.scrollContainer.style.opacity = '1';
+
     console.log('Initializing Locomotive Scroll on:', this.scrollContainer);
 
     // Initialize with better momentum settings
-    this.instance = new LocomotiveScroll({
-      el: this.scrollContainer,
-      smooth: true,
-      multiplier: 1.2,
-      lerp: 0.06,
-      class: 'is-inview',
-      offset: ['30%', 0],
-      repeat: false,
-      firefoxMultiplier: 100,
-      touchMultiplier: 3,
-      scrollFromAnywhere: true,
-      smartphone: {
+    try {
+      this.instance = new LocomotiveScroll({
+        el: this.scrollContainer,
         smooth: true,
-        direction: 'vertical',
-        multiplier: 2.5,
-        lerp: 0.1,
+        multiplier: 1.2,
+        lerp: 0.06,
         class: 'is-inview',
-        offset: ['20%', 0]
-      },
-      tablet: {
-        smooth: true,
-        direction: 'vertical',
-        multiplier: 2.0,
-        lerp: 0.08,
-        class: 'is-inview',
-        offset: ['20%', 0]
-      }
-    });
+        offset: ['30%', 0],
+        repeat: false,
+        firefoxMultiplier: 100,
+        touchMultiplier: 3,
+        scrollFromAnywhere: true,
+        smartphone: {
+          smooth: true,
+          direction: 'vertical',
+          multiplier: 2.5,
+          lerp: 0.1,
+          class: 'is-inview',
+          offset: ['20%', 0]
+        },
+        tablet: {
+          smooth: true,
+          direction: 'vertical',
+          multiplier: 2.0,
+          lerp: 0.08,
+          class: 'is-inview',
+          offset: ['20%', 0]
+        }
+      });
 
-    window.locoScroll = this.instance;
+      window.locoScroll = this.instance;
 
-    // Better ScrollTrigger sync
-    this.syncScrollTrigger();
-    
-    // Initialize anchor scrolling
-    this.initScrollAnchors();
-    
-    // Update on images load
-    this.updateOnImagesLoad();
+      // Better ScrollTrigger sync
+      this.syncScrollTrigger();
+      
+      // Initialize anchor scrolling
+      this.initScrollAnchors();
+      
+      // Update on images load
+      this.updateOnImagesLoad();
+      
+      // Setup resize observer for dynamic content
+      this.setupResizeObserver();
+      
+    } catch (error) {
+      console.error('Failed to initialize Locomotive Scroll:', error);
+      // Fallback to native scroll
+      this.scrollContainer.style.overflowY = 'auto';
+    }
   }
 
   syncScrollTrigger() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-      console.warn('GSAP or ScrollTrigger not loaded');
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || !this.instance) {
+      console.warn('GSAP, ScrollTrigger, or Locomotive instance not available');
       return;
     }
 
@@ -170,7 +182,7 @@ class Scroll {
       pinType: this.scrollContainer.style.transform ? "transform" : "fixed"
     });
 
-    const scrollHandler = ScrollTrigger.update;
+    const scrollHandler = () => ScrollTrigger.update();
     this.instance.on('scroll', scrollHandler);
     this.scrollHandlers.push(scrollHandler);
     
@@ -182,20 +194,38 @@ class Scroll {
     ScrollTrigger.refresh();
   }
 
-  updateOnImagesLoad() {
-    const images = this.scrollContainer.querySelectorAll('img');
-    let loadedCount = 0;
+  setupResizeObserver() {
+    if (!this.scrollContainer || !this.instance) return;
     
-    const updateScroll = () => {
-      if (this.instance) {
-        setTimeout(() => {
+    // Use ResizeObserver for better performance
+    if ('ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(debounce(() => {
+        if (this.instance) {
           this.instance.update();
           if (typeof ScrollTrigger !== 'undefined') {
             ScrollTrigger.refresh();
           }
-        }, 100);
+        }
+      }, 250));
+      
+      this.resizeObserver.observe(this.scrollContainer);
+    }
+  }
+
+  updateOnImagesLoad() {
+    if (!this.scrollContainer) return;
+    
+    const images = this.scrollContainer.querySelectorAll('img');
+    let loadedCount = 0;
+    
+    const updateScroll = debounce(() => {
+      if (this.instance) {
+        this.instance.update();
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+        }
       }
-    };
+    }, 100);
 
     if (images.length === 0) {
       updateScroll();
@@ -209,43 +239,61 @@ class Scroll {
           updateScroll();
         }
       } else {
-        img.addEventListener('load', () => {
+        const handleLoad = () => {
           loadedCount++;
           if (loadedCount === images.length) {
             updateScroll();
           }
-        }, { once: true });
+        };
+        img.addEventListener('load', handleLoad, { once: true });
+        img.addEventListener('error', handleLoad, { once: true }); // Handle errors too
       }
     });
   }
 
   initScrollAnchors() {
-    document.querySelectorAll('[data-scroll-to]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const target = document.querySelector(targetId);
-        
-        if (target && this.instance) {
-          this.instance.scrollTo(target, {
-            offset: -100,
-            duration: 1200,
-            easing: [0.25, 0.0, 0.35, 1.0]
-          });
-        }
-      });
-    });
+    if (!this.scrollContainer) return;
+    
+    const handleAnchorClick = (e) => {
+      const link = e.target.closest('[data-scroll-to]');
+      if (!link) return;
+      
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      const target = document.querySelector(targetId);
+      
+      if (target && this.instance) {
+        this.instance.scrollTo(target, {
+          offset: -100,
+          duration: 1200,
+          easing: [0.25, 0.0, 0.35, 1.0]
+        });
+      }
+    };
+    
+    // Use event delegation for better performance
+    document.addEventListener('click', handleAnchorClick);
+    this.scrollHandlers.push(() => document.removeEventListener('click', handleAnchorClick));
   }
 
   destroy() {
+    // Clean up resize observer
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+    
     // Clean up event listeners
     this.scrollHandlers.forEach(handler => {
-      if (this.instance) {
+      if (typeof handler === 'function') {
+        handler();
+      } else if (this.instance) {
         this.instance.off('scroll', handler);
       }
     });
     this.scrollHandlers = [];
     
+    // Destroy Locomotive instance
     if (window.locoScroll) {
       window.locoScroll.destroy();
       window.locoScroll = null;
@@ -256,10 +304,18 @@ class Scroll {
       this.instance = null;
     }
     
+    // Clean up ScrollTrigger
     if (typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.getAll().forEach(t => t.kill());
       ScrollTrigger.clearMatchMedia();
       ScrollTrigger.clearScrollMemory();
+    }
+    
+    // Reset container styles
+    if (this.scrollContainer) {
+      this.scrollContainer.style.transform = '';
+      this.scrollContainer.style.willChange = '';
+      this.scrollContainer.style.position = '';
     }
   }
 }
@@ -269,26 +325,31 @@ class Header {
     this.header = null;
     this.lastScroll = 0;
     this.scrollHandler = null;
+    this.rafId = null;
+    this.ticking = false;
   }
 
   init() {
     this.header = document.querySelector('.c-header');
-    if (!this.header || !window.locoScroll) return;
+    if (!this.header) {
+      console.warn('Header element not found');
+      return;
+    }
+    
+    if (!window.locoScroll) {
+      console.warn('Locomotive Scroll not initialized');
+      return;
+    }
 
+    // Use RAF for better performance
     this.scrollHandler = (args) => {
-      const currentScroll = args.scroll.y;
-      
-      // Hide on scroll down, show on scroll up
-      if (currentScroll > this.lastScroll && currentScroll > 100) {
-        this.header.classList.add('is-hidden');
-      } else {
-        this.header.classList.remove('is-hidden');
+      if (!this.ticking) {
+        this.rafId = requestAnimationFrame(() => {
+          this.updateHeader(args.scroll.y);
+          this.ticking = false;
+        });
+        this.ticking = true;
       }
-      
-      // Add background when scrolled
-      this.header.classList.toggle('is-scrolled', currentScroll > 50);
-      
-      this.lastScroll = currentScroll;
     };
 
     window.locoScroll.on('scroll', this.scrollHandler);
@@ -297,11 +358,32 @@ class Header {
     this.updateActiveNav();
   }
 
+  updateHeader(currentScroll) {
+    // Hide on scroll down, show on scroll up
+    if (currentScroll > this.lastScroll && currentScroll > 100) {
+      this.header.classList.add('is-hidden');
+    } else {
+      this.header.classList.remove('is-hidden');
+    }
+    
+    // Add background when scrolled
+    this.header.classList.toggle('is-scrolled', currentScroll > 50);
+    
+    this.lastScroll = currentScroll;
+  }
+
   updateActiveNav() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop() || 'index.html';
+    
     document.querySelectorAll('.c-nav__link').forEach(link => {
       const href = link.getAttribute('href');
-      if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+      if (!href) return;
+      
+      const linkPage = href.split('/').pop();
+      if (linkPage === currentPage || 
+          (currentPage === 'index.html' && (href === '/' || href === './')) ||
+          currentPath.endsWith(href)) {
         link.classList.add('is-active');
       } else {
         link.classList.remove('is-active');
@@ -310,58 +392,78 @@ class Header {
   }
 
   destroy() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+    
     if (window.locoScroll && this.scrollHandler) {
       window.locoScroll.off('scroll', this.scrollHandler);
+      this.scrollHandler = null;
     }
+    
+    this.header = null;
+    this.lastScroll = 0;
+    this.ticking = false;
   }
 }
 
 class Preloader {
+  constructor() {
+    this.preloader = null;
+  }
+
   init() {
-    const preloader = document.querySelector('.c-preloader');
-    if (!preloader) {
+    this.preloader = document.querySelector('.c-preloader');
+    if (!this.preloader) {
       console.log('No preloader element found');
       document.documentElement.classList.remove('is-loading');
       return Promise.resolve();
     }
 
     // Check for preloader text - try both class names
-    let text = preloader.querySelector('.c-preloader_text');
-    if (!text) {
-      text = preloader.querySelector('.c-preloader__text');
-    }
+    let text = this.preloader.querySelector('.c-preloader_text, .c-preloader__text');
     
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({
+      onComplete: () => {
+        console.log('Preloader animation complete');
+        document.documentElement.classList.remove('is-loading');
+        if (this.preloader && this.preloader.parentNode) {
+          this.preloader.parentNode.removeChild(this.preloader);
+        }
+        this.preloader = null;
+      }
+    });
     
     // Scramble effect on preloader text if it exists
     if (text) {
       console.log('Animating preloader text');
       tl.add(scrambleText(text, 1.5));
-    } else {
-      console.warn('Preloader text element not found');
     }
     
     // Fade out preloader
-    tl.to(preloader, {
+    tl.to(this.preloader, {
       opacity: 0,
       duration: 0.8,
       ease: "power2.out",
-      delay: text ? 0.3 : 0,
-      onComplete: () => {
-        console.log('Preloader animation complete');
-        document.documentElement.classList.remove('is-loading');
-        preloader.style.display = 'none';
-        preloader.remove();
-      }
+      delay: text ? 0.3 : 0
     });
 
     return tl;
+  }
+
+  destroy() {
+    if (this.preloader && this.preloader.parentNode) {
+      this.preloader.parentNode.removeChild(this.preloader);
+    }
+    this.preloader = null;
   }
 }
 
 class Animations {
   constructor() {
     this.scrollTriggers = [];
+    this.animations = [];
   }
 
   init() {
@@ -370,14 +472,23 @@ class Animations {
       return;
     }
 
-    // Animate stats counters
-    this.animateStats();
-    
-    // Code copy buttons
-    this.initCodeCopy();
-    
-    // Add fade in animations
-    this.initFadeAnimations();
+    // Clean up any existing triggers
+    this.destroy();
+
+    // Wait for next frame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      // Animate stats counters
+      this.animateStats();
+      
+      // Code copy buttons
+      this.initCodeCopy();
+      
+      // Add fade in animations
+      this.initFadeAnimations();
+      
+      // Refresh ScrollTrigger after all animations are set up
+      ScrollTrigger.refresh();
+    });
   }
 
   animateStats() {
@@ -404,7 +515,7 @@ class Animations {
           const suffix = match[2];
           const obj = { value: 0 };
           
-          gsap.to(obj, {
+          const anim = gsap.to(obj, {
             value: endValue,
             duration: 2,
             ease: "power2.out",
@@ -415,6 +526,8 @@ class Animations {
               stat.textContent = current + suffix;
             }
           });
+          
+          this.animations.push(anim);
         }
       });
       
@@ -427,7 +540,7 @@ class Animations {
     if (!scrollContainer) return;
 
     // Fade in elements with data-fade attribute
-    document.querySelectorAll('[data-fade]').forEach(el => {
+    document.querySelectorAll('[data-fade]').forEach((el, index) => {
       gsap.set(el, { opacity: 0, y: 30 });
       
       const trigger = ScrollTrigger.create({
@@ -436,12 +549,15 @@ class Animations {
         start: 'top 85%',
         once: true,
         onEnter: () => {
-          gsap.to(el, {
+          const anim = gsap.to(el, {
             opacity: 1,
             y: 0,
             duration: 0.8,
+            delay: index * 0.05, // Stagger effect
             ease: "power2.out"
           });
+          
+          this.animations.push(anim);
         }
       });
       
@@ -457,6 +573,7 @@ class Animations {
 
       const btn = document.createElement('button');
       btn.className = 'c-code-copy';
+      btn.setAttribute('aria-label', 'Copy code');
       btn.innerHTML = `
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -465,25 +582,61 @@ class Animations {
         <span>Copy</span>
       `;
       
-      btn.addEventListener('click', () => {
-        const code = block.textContent.trim();
-        navigator.clipboard.writeText(code).then(() => {
+      const handleCopy = async () => {
+        try {
+          const code = block.textContent.trim();
+          await navigator.clipboard.writeText(code);
           btn.querySelector('span').textContent = 'Copied!';
+          btn.classList.add('is-copied');
+          
           setTimeout(() => {
             btn.querySelector('span').textContent = 'Copy';
+            btn.classList.remove('is-copied');
           }, 2000);
-        }).catch(err => {
+        } catch (err) {
           console.error('Failed to copy:', err);
-        });
-      });
-
+          // Fallback for older browsers
+          const textarea = document.createElement('textarea');
+          textarea.value = block.textContent.trim();
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand('copy');
+            btn.querySelector('span').textContent = 'Copied!';
+            setTimeout(() => {
+              btn.querySelector('span').textContent = 'Copy';
+            }, 2000);
+          } catch (e) {
+            console.error('Fallback copy failed:', e);
+          }
+          document.body.removeChild(textarea);
+        }
+      };
+      
+      btn.addEventListener('click', handleCopy);
+      
       wrapper.style.position = 'relative';
       wrapper.appendChild(btn);
     });
   }
 
   destroy() {
-    this.scrollTriggers.forEach(trigger => trigger.kill());
+    // Kill all animations
+    this.animations.forEach(anim => {
+      if (anim && anim.kill) {
+        anim.kill();
+      }
+    });
+    this.animations = [];
+    
+    // Kill all scroll triggers
+    this.scrollTriggers.forEach(trigger => {
+      if (trigger && trigger.kill) {
+        trigger.kill();
+      }
+    });
     this.scrollTriggers = [];
   }
 }
@@ -496,6 +649,9 @@ class DynamicIslandNav {
     this.menuLinks = [];
     this.isOpen = false;
     this.timeline = null;
+    this.clickHandler = null;
+    this.closeHandler = null;
+    this.escHandler = null;
   }
 
   init() {
@@ -514,45 +670,52 @@ class DynamicIslandNav {
   }
 
   setupEventListeners() {
-    // Open menu
-    this.island.addEventListener('click', () => this.open());
-    
-    // Close menu
-    this.closeBtn.addEventListener('click', () => this.close());
-    
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
+    // Create bound handlers for proper cleanup
+    this.clickHandler = () => this.open();
+    this.closeHandler = () => this.close();
+    this.escHandler = (e) => {
       if (e.key === 'Escape' && this.isOpen) {
         this.close();
       }
-    });
+    };
+    
+    // Open menu
+    this.island.addEventListener('click', this.clickHandler);
+    
+    // Close menu
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', this.closeHandler);
+    }
+    
+    // Close on escape key
+    document.addEventListener('keydown', this.escHandler);
 
-    // Handle menu link clicks
-    this.menuLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
+    // Handle menu link clicks with event delegation
+    this.menu.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-nav-link]');
+      if (!link) return;
+      
+      const href = link.getAttribute('href');
+      if (!href) return;
+      
+      // If it's an anchor link on the same page
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        this.close();
         
-        // If it's an anchor link on the same page
-        if (href.startsWith('#')) {
-          e.preventDefault();
-          this.close();
-          
-          // Scroll to section after menu closes
-          setTimeout(() => {
-            const target = document.querySelector(href);
-            if (target && window.locoScroll) {
-              window.locoScroll.scrollTo(target, {
-                offset: -100,
-                duration: 1200
-              });
-            }
-          }, 600);
-        } else {
-          // For page navigation, just close menu
-          // Let Barba handle the page transition
-          this.close();
-        }
-      });
+        // Scroll to section after menu closes
+        setTimeout(() => {
+          const target = document.querySelector(href);
+          if (target && window.locoScroll) {
+            window.locoScroll.scrollTo(target, {
+              offset: -100,
+              duration: 1200
+            });
+          }
+        }, 600);
+      }
+      // For regular links, let Barba handle the transition
+      // The menu will be closed in Barba's leave hook
     });
   }
 
@@ -563,15 +726,18 @@ class DynamicIslandNav {
       opacity: 0, 
       y: 50 
     });
-    gsap.set(this.closeBtn, { 
-      opacity: 0, 
-      scale: 0.8,
-      rotation: -90 
-    });
+    
+    if (this.closeBtn) {
+      gsap.set(this.closeBtn, { 
+        opacity: 0, 
+        scale: 0.8,
+        rotation: -90 
+      });
+    }
   }
 
   open() {
-    if (this.isOpen) return;
+    if (this.isOpen || !this.menu) return;
     this.isOpen = true;
 
     console.log('Opening menu');
@@ -582,6 +748,11 @@ class DynamicIslandNav {
     
     if (window.locoScroll) {
       window.locoScroll.stop();
+    }
+
+    // Kill existing timeline if any
+    if (this.timeline) {
+      this.timeline.kill();
     }
 
     // Create opening animation timeline
@@ -595,40 +766,49 @@ class DynamicIslandNav {
     });
 
     // Animate close button
-    this.timeline.to(this.closeBtn, {
-      opacity: 1,
-      scale: 1,
-      rotation: 0,
-      duration: 0.4,
-      ease: "back.out(1.7)"
-    }, "-=0.2");
+    if (this.closeBtn) {
+      this.timeline.to(this.closeBtn, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 0.4,
+        ease: "back.out(1.7)"
+      }, "-=0.2");
+    }
 
     // Stagger menu links
-    this.timeline.to(this.menuLinks, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      stagger: 0.08,
-      ease: "power3.out"
-    }, "-=0.3");
+    if (this.menuLinks.length > 0) {
+      this.timeline.to(this.menuLinks, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power3.out"
+      }, "-=0.3");
 
-    // Scramble effect on each link text
-    this.menuLinks.forEach((link, index) => {
-      const textElement = link.querySelector('.c-nav-menu__link-text');
-      if (textElement) {
-        this.timeline.add(
-          scrambleText(textElement, 0.6),
-          `-=${0.6 - (index * 0.05)}`
-        );
-      }
-    });
+      // Scramble effect on each link text
+      this.menuLinks.forEach((link, index) => {
+        const textElement = link.querySelector('.c-nav-menu__link-text');
+        if (textElement) {
+          this.timeline.add(
+            scrambleText(textElement, 0.6),
+            `-=${0.6 - (index * 0.05)}`
+          );
+        }
+      });
+    }
   }
 
   close() {
-    if (!this.isOpen) return;
+    if (!this.isOpen || !this.menu) return;
     this.isOpen = false;
 
     console.log('Closing menu');
+
+    // Kill existing timeline if any
+    if (this.timeline) {
+      this.timeline.kill();
+    }
 
     // Create closing animation timeline
     const closeTimeline = gsap.timeline({
@@ -639,26 +819,33 @@ class DynamicIslandNav {
         if (window.locoScroll) {
           window.locoScroll.start();
         }
+        
+        // Reset for next animation
+        this.prepareAnimation();
       }
     });
 
     // Fade out links
-    closeTimeline.to(this.menuLinks, {
-      opacity: 0,
-      y: -30,
-      duration: 0.3,
-      stagger: 0.03,
-      ease: "power2.in"
-    });
+    if (this.menuLinks.length > 0) {
+      closeTimeline.to(this.menuLinks, {
+        opacity: 0,
+        y: -30,
+        duration: 0.3,
+        stagger: 0.03,
+        ease: "power2.in"
+      });
+    }
 
     // Fade out close button
-    closeTimeline.to(this.closeBtn, {
-      opacity: 0,
-      scale: 0.8,
-      rotation: 90,
-      duration: 0.3,
-      ease: "power2.in"
-    }, "-=0.2");
+    if (this.closeBtn) {
+      closeTimeline.to(this.closeBtn, {
+        opacity: 0,
+        scale: 0.8,
+        rotation: 90,
+        duration: 0.3,
+        ease: "power2.in"
+      }, "-=0.2");
+    }
 
     // Fade out menu background
     closeTimeline.to(this.menu, {
@@ -669,13 +856,37 @@ class DynamicIslandNav {
   }
 
   destroy() {
+    // Remove event listeners
+    if (this.island && this.clickHandler) {
+      this.island.removeEventListener('click', this.clickHandler);
+    }
+    
+    if (this.closeBtn && this.closeHandler) {
+      this.closeBtn.removeEventListener('click', this.closeHandler);
+    }
+    
+    if (this.escHandler) {
+      document.removeEventListener('keydown', this.escHandler);
+    }
+    
+    // Kill timeline
     if (this.timeline) {
       this.timeline.kill();
+      this.timeline = null;
     }
+    
+    // Clean up classes
     document.body.classList.remove('menu-active');
     if (this.menu) {
       this.menu.classList.remove('is-active');
     }
+    
+    // Reset state
+    this.isOpen = false;
+    this.island = null;
+    this.menu = null;
+    this.closeBtn = null;
+    this.menuLinks = [];
   }
 }
 
@@ -691,11 +902,17 @@ function initBarba() {
 
   barba.init({
     sync: true,
-    debug: true, // Enable debug for troubleshooting
+    debug: false, // Set to true for debugging
     timeout: 7000,
     prevent: ({ el }) => {
-      // Prevent Barba from handling anchor links
-      return el.getAttribute('href').startsWith('#');
+      // Prevent Barba from handling certain links
+      const href = el.getAttribute('href');
+      return !href || 
+             href.startsWith('#') || 
+             href.startsWith('mailto:') || 
+             href.startsWith('tel:') ||
+             el.getAttribute('target') === '_blank' ||
+             el.classList.contains('no-barba');
     },
     
     transitions: [{
@@ -713,7 +930,7 @@ function initBarba() {
         
         document.body.classList.add('is-transitioning');
         
-        // Fade out
+        // Fade out current container
         gsap.to(data.current.container, {
           opacity: 0,
           y: -30,
@@ -723,158 +940,230 @@ function initBarba() {
         });
       },
 
+      async beforeEnter(data) {
+        // Scroll to top immediately
+        window.scrollTo(0, 0);
+        
+        // Prepare next container
+        const container = data.next.container;
+        const scrollContainer = container.querySelector('[data-scroll-container]');
+        
+        // Ensure visibility
+        if (scrollContainer) {
+          scrollContainer.style.transform = '';
+          scrollContainer.style.willChange = '';
+          scrollContainer.style.position = '';
+          scrollContainer.style.visibility = 'visible';
+          scrollContainer.style.opacity = '1';
+        }
+        
+        // Set initial state for animation
+        gsap.set(container, { 
+          opacity: 0,
+          y: 30
+        });
+      },
+
       async enter(data) {
         console.log('Entering page:', data.next.url.href);
         
-        // Scroll to top
-        window.scrollTo(0, 0);
+        // Destroy all existing instances properly
+        console.log('Cleaning up previous instances...');
         
-        // Destroy previous instances
-        console.log('Destroying previous instances...');
         if (window.scrollInstance) {
           window.scrollInstance.destroy();
+          window.scrollInstance = null;
         }
+        
         if (window.headerInstance) {
           window.headerInstance.destroy();
+          window.headerInstance = null;
         }
+        
         if (window.animationsInstance) {
           window.animationsInstance.destroy();
+          window.animationsInstance = null;
         }
+        
         if (window.dynamicNavInstance) {
           window.dynamicNavInstance.destroy();
+          window.dynamicNavInstance = null;
         }
         
-        // Wait for DOM to settle
+        // Update body classes
+        document.body.classList.remove('is-transitioning', 'menu-active');
+        
+        // Get the new container
+        const container = data.next.container;
+        
+        // Animate container in
+        await gsap.to(container, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+        
+        // Small delay to ensure DOM is ready
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        // FIX: Set container to visible immediately to prevent white screen
-        const container = data.next.container;
-        gsap.set(container, { opacity: 1, y: 0 });
+        // Re-initialize all modules
+        console.log('Re-initializing modules...');
         
-        // Remove transitioning class
-        document.body.classList.remove('is-transitioning');
-        
-        console.log('Re-initializing scroll...');
+        // Initialize scroll first
         const scroll = new Scroll();
         scroll.init();
         window.scrollInstance = scroll;
         
+        // Wait a bit for scroll to be ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Initialize other modules
+        const header = new Header();
+        header.init();
+        window.headerInstance = header;
+        
+        const animations = new Animations();
+        animations.init();
+        window.animationsInstance = animations;
+
+        const dynamicNav = new DynamicIslandNav();
+        dynamicNav.init();
+        window.dynamicNavInstance = dynamicNav;
+        
         // Animate hero title if present
         const heroTitle = container.querySelector('.c-hero__title');
-        
-        const tl = gsap.timeline();
-        
-        // Scramble hero title
         if (heroTitle) {
-          console.log('Animating hero title');
-          tl.add(scrambleText(heroTitle, 1.2));
+          scrambleText(heroTitle, 1.2);
         }
         
-        // Re-init modules with delay
-        setTimeout(() => {
-          console.log('Re-initializing modules...');
-          
-          const header = new Header();
-          header.init();
-          window.headerInstance = header;
-          
-          const animations = new Animations();
-          animations.init();
-          window.animationsInstance = animations;
-
-          const dynamicNav = new DynamicIslandNav();
-          dynamicNav.init();
-          window.dynamicNavInstance = dynamicNav;
-          
-          console.log('All modules re-initialized');
-        }, 200);
-        
-        // Update page class
-        document.body.className = data.next.namespace || '';
+        console.log('Page transition complete');
       },
 
-      async beforeLeave() {
-        console.log('Before leave hook');
-        // Clean up before leaving
-        if (window.animationsInstance) {
-          window.animationsInstance.destroy();
+      async afterEnter(data) {
+        // Final updates after everything is loaded
+        setTimeout(() => {
+          if (window.scrollInstance && window.scrollInstance.instance) {
+            window.scrollInstance.instance.update();
+          }
+          if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+          }
+        }, 200);
+        
+        // Update page namespace
+        document.body.className = data.next.namespace || '';
+        
+        // Update active navigation
+        if (window.headerInstance) {
+          window.headerInstance.updateActiveNav();
         }
       }
-    }]
+    }],
+    
+    views: [],
+    
+    // Global hooks
+    requestError(trigger, action, url, response) {
+      console.error('Barba request error:', { trigger, action, url, response });
+      
+      // Fallback to regular navigation on error
+      if (url) {
+        window.location.href = url.href;
+      }
+      
+      return false;
+    }
+  });
+
+  // Handle browser back/forward buttons
+  barba.hooks.after(() => {
+    window.ga && ga('send', 'pageview', location.pathname);
   });
 }
 
 // ── INITIALIZE ───────────────────────────────────────────
 
-window.addEventListener('DOMContentLoaded', async () => {
+async function initializeApp() {
   console.log('DOM Content Loaded - Initializing app');
   
   // Add is-loading class immediately
   document.documentElement.classList.add('is-loading');
   
-  // Load dependencies
   try {
+    // Load dependencies
     console.log('Loading dependencies...');
     await loadScripts(deps);
     console.log('Dependencies loaded successfully');
-  } catch (error) {
-    console.error('Failed to load dependencies:', error);
-    document.documentElement.classList.remove('is-loading');
-    return;
-  }
-
-  // Wait for GSAP to be ready
-  if (typeof gsap === 'undefined') {
-    console.error('GSAP failed to load');
-    document.documentElement.classList.remove('is-loading');
-    return;
-  }
-
-  // Initialize core modules
-  try {
+    
+    // Verify GSAP is ready
+    if (typeof gsap === 'undefined') {
+      throw new Error('GSAP failed to load');
+    }
+    
+    // Initialize preloader
     console.log('Initializing preloader...');
     const preloader = new Preloader();
     await preloader.init();
-
+    
+    // Initialize smooth scroll
     console.log('Initializing smooth scroll...');
     const scroll = new Scroll();
     scroll.init();
     window.scrollInstance = scroll;
-
-    // Delay header init to ensure scroll is ready
-    setTimeout(() => {
-      console.log('Initializing header...');
-      const header = new Header();
-      header.init();
-      window.headerInstance = header;
-    }, 100);
-
+    
+    // Small delay to ensure scroll is ready
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Initialize header
+    console.log('Initializing header...');
+    const header = new Header();
+    header.init();
+    window.headerInstance = header;
+    
+    // Initialize animations
     console.log('Initializing animations...');
     const animations = new Animations();
     animations.init();
     window.animationsInstance = animations;
-
+    
+    // Initialize Dynamic Island Navigation
     console.log('Initializing Dynamic Island Navigation...');
     const dynamicNav = new DynamicIslandNav();
     dynamicNav.init();
     window.dynamicNavInstance = dynamicNav;
-
-    // Initialize Barba
+    
+    // Initialize Barba for page transitions
     console.log('Initializing page transitions...');
     initBarba();
     
     console.log('App initialization complete');
+    
   } catch (error) {
     console.error('Initialization error:', error);
     document.documentElement.classList.remove('is-loading');
+    
+    // Fallback: ensure basic functionality
+    document.body.style.overflow = 'auto';
   }
-});
+}
 
-// Handle page visibility
+// Wait for DOM to be fully loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+  // DOM already loaded
+  initializeApp();
+}
+
+// Handle page visibility changes
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && window.locoScroll) {
+  if (!document.hidden) {
+    // Page is visible again
     requestAnimationFrame(() => {
-      window.locoScroll.update();
+      if (window.locoScroll) {
+        window.locoScroll.update();
+      }
       if (typeof ScrollTrigger !== 'undefined') {
         ScrollTrigger.refresh();
       }
