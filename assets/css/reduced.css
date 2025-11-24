@@ -162,7 +162,7 @@ img, svg {
   display: block;
 }
 
-/* ── LOCOMOTIVE SCROLL CONTAINER ──────────────────────────── */
+/* ── LOCOMOTIVE SCROLL CONTAINER (FIXED) ────────────────── */
 html.has-scroll-smooth {
   overflow: hidden;
 }
@@ -177,6 +177,31 @@ html.has-scroll-smooth body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  /* FIX: Ensure visibility during transitions */
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* FIX: Prevent content hiding during Barba transitions */
+[data-barba="container"] {
+  visibility: visible !important;
+}
+
+[data-barba="container"] [data-scroll-container] {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Only hide during actual loading */
+.is-loading [data-scroll-container] {
+  opacity: 0;
+}
+
+/* FIX: Ensure proper z-index stacking */
+.c-header,
+.c-nav-island {
+  z-index: 1000;
+  position: relative;
 }
 
 /* ── LAYOUT SYSTEM ───────────────────────────────────────── */
@@ -604,7 +629,7 @@ section {
   letter-spacing: 0.05em;
 }
 
-/* ── BARBA TRANSITIONS ───────────────────────────────────── */
+/* ── BARBA TRANSITIONS (FIXED) ───────────────────────────── */
 [data-barba="wrapper"] {
   position: relative;
   width: 100%;
@@ -614,17 +639,21 @@ section {
 [data-barba="container"] {
   position: relative;
   width: 100%;
+  /* FIX: Ensure container is always visible */
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .is-transitioning {
   overflow: hidden;
 }
 
+/* FIX: Remove absolute positioning during transition */
 .is-transitioning [data-barba="container"] {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
 }
 
 /* ── LOADING STATES ──────────────────────────────────────── */
@@ -965,6 +994,10 @@ button:focus:not(:focus-visible) {
 
 .c-nav-menu__link:hover::before {
   width: 100%;
+}
+
+.c-nav-menu__link-text {
+  display: inline-block;
 }
 
 /* Menu Footer Info */
