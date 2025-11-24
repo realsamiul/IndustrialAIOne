@@ -9,7 +9,7 @@
 <body data-barba="wrapper">
 
     <div class="c-preloader">
-        <div class="c-preloader_text">Loading Stream...</div>
+        <div class="c-preloader__text">Loading Stream...</div>
     </div>
 
     <header class="c-header">
@@ -231,6 +231,66 @@
 
         </div>
     </main>
+
+    <!-- Dynamic Island Trigger -->
+    <button class="c-nav-island" id="navIsland" aria-label="Open navigation menu">
+      <div class="c-nav-island__icon">
+        <svg class="c-nav-island__q-symbol" viewBox="0 0 100 100" fill="currentColor">
+          <path d="M50 10 C 72 10, 90 28, 90 50 C 90 72, 72 90, 50 90 C 28 90, 10 72, 10 50 C 10 28, 28 10, 50 10 M50 25 C 35 25, 25 35, 25 50 C 25 65, 35 75, 50 75 C 65 75, 75 65, 75 50 C 75 35, 65 25, 50 25 M65 65 L 85 85" stroke="currentColor" stroke-width="8" fill="none"/>
+        </svg>
+      </div>
+      <div class="c-nav-island__label">MENU</div>
+    </button>
+
+    <!-- Fullscreen Menu Overlay -->
+    <div class="c-nav-menu" id="navMenu">
+      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav class="c-nav-menu__content">
+        <ul class="c-nav-menu__list">
+          <li class="c-nav-menu__item">
+            <a href="index.html" class="c-nav-menu__link" data-nav-link>
+              <span class="c-nav-menu__link-text">Home</span>
+            </a>
+          </li>
+          <li class="c-nav-menu__item">
+            <a href="work.html" class="c-nav-menu__link" data-nav-link>
+              <span class="c-nav-menu__link-text">The Tools</span>
+            </a>
+          </li>
+          <li class="c-nav-menu__item">
+            <a href="qc-vision.html" class="c-nav-menu__link" data-nav-link>
+              <span class="c-nav-menu__link-text">QC Vision</span>
+            </a>
+          </li>
+          <li class="c-nav-menu__item">
+            <a href="power-guard.html" class="c-nav-menu__link" data-nav-link>
+              <span class="c-nav-menu__link-text">PowerGuard</span>
+            </a>
+          </li>
+          <li class="c-nav-menu__item">
+            <a href="fail-predict.html" class="c-nav-menu__link" data-nav-link>
+              <span class="c-nav-menu__link-text">FailPredict</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="c-nav-menu__footer">
+        <div>
+          <p>M0NARQ Industrial-AI.One</p>
+          <p>Chattogram, Bangladesh</p>
+        </div>
+        <div>
+          <a href="mailto:invest@monarq.ai">invest@monarq.ai</a>
+        </div>
+      </div>
+    </div>
 
     <script src="assets/js/app.js"></script>
 </body>
