@@ -485,6 +485,184 @@ class Animations {
   }
 }
 
+class DynamicIslandNav {
+  constructor() {
+    this.island = null;
+    this.menu = null;
+    this.closeBtn = null;
+    this.menuLinks = [];
+    this.isOpen = false;
+    this.timeline = null;
+  }
+
+  init() {
+    this.island = document.getElementById('navIsland');
+    this.menu = document.getElementById('navMenu');
+    this.closeBtn = document.getElementById('navClose');
+    this.menuLinks = [...document.querySelectorAll('[data-nav-link]')];
+
+    if (!this.island || !this.menu) {
+      console.warn('Dynamic Island elements not found');
+      return;
+    }
+
+    this.setupEventListeners();
+    this.prepareAnimation();
+  }
+
+  setupEventListeners() {
+    // Open menu
+    this.island.addEventListener('click', () => this.open());
+    
+    // Close menu
+    this.closeBtn.addEventListener('click', () => this.close());
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
+
+    // Close on link click (for smooth transitions)
+    this.menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        // Only close if it's the same page (for anchor links)
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          this.close();
+          
+          // Scroll to section after menu closes
+          setTimeout(() => {
+            const target = document.querySelector(href);
+            if (target && window.locoScroll) {
+              window.locoScroll.scrollTo(target, {
+                offset: -100,
+                duration: 1200
+              });
+            }
+          }, 600);
+        } else {
+          // For page navigation, close menu with delay
+          this.close();
+        }
+      });
+    });
+  }
+
+  prepareAnimation() {
+    // Set initial states
+    gsap.set(this.menu, { opacity: 0 });
+    gsap.set(this.menuLinks, { 
+      opacity: 0, 
+      y: 50 
+    });
+    gsap.set(this.closeBtn, { 
+      opacity: 0, 
+      scale: 0.8,
+      rotation: -90 
+    });
+  }
+
+  open() {
+    if (this.isOpen) return;
+    this.isOpen = true;
+
+    // Disable scroll
+    document.body.classList.add('menu-active');
+    if (window.locoScroll) {
+      window.locoScroll.stop();
+    }
+
+    // Create opening animation timeline
+    this.timeline = gsap.timeline();
+    
+    // Fade in menu background
+    this.timeline.to(this.menu, {
+      opacity: 1,
+      duration: 0.4,
+      ease: "power2.out"
+    });
+
+    // Animate close button
+    this.timeline.to(this.closeBtn, {
+      opacity: 1,
+      scale: 1,
+      rotation: 0,
+      duration: 0.4,
+      ease: "back.out(1.7)"
+    }, "-=0.2");
+
+    // Stagger menu links
+    this.timeline.to(this.menuLinks, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: "power3.out"
+    }, "-=0.3");
+
+    // Scramble effect on each link text
+    this.menuLinks.forEach((link, index) => {
+      const textElement = link.querySelector('.c-nav-menu__link-text');
+      if (textElement) {
+        this.timeline.add(
+          scrambleText(textElement, 0.6),
+          `-=${0.6 - (index * 0.05)}`
+        );
+      }
+    });
+  }
+
+  close() {
+    if (!this.isOpen) return;
+    this.isOpen = false;
+
+    // Create closing animation timeline
+    const closeTimeline = gsap.timeline({
+      onComplete: () => {
+        document.body.classList.remove('menu-active');
+        if (window.locoScroll) {
+          window.locoScroll.start();
+        }
+      }
+    });
+
+    // Fade out links
+    closeTimeline.to(this.menuLinks, {
+      opacity: 0,
+      y: -30,
+      duration: 0.3,
+      stagger: 0.03,
+      ease: "power2.in"
+    });
+
+    // Fade out close button
+    closeTimeline.to(this.closeBtn, {
+      opacity: 0,
+      scale: 0.8,
+      rotation: 90,
+      duration: 0.3,
+      ease: "power2.in"
+    }, "-=0.2");
+
+    // Fade out menu background
+    closeTimeline.to(this.menu, {
+      opacity: 0,
+      duration: 0.4,
+      ease: "power2.in"
+    }, "-=0.1");
+  }
+
+  destroy() {
+    if (this.timeline) {
+      this.timeline.kill();
+    }
+    document.body.classList.remove('menu-active');
+  }
+}
+
 // ── BARBA PAGE TRANSITIONS ──────────────────────────────
 
 function initBarba() {
@@ -552,6 +730,9 @@ function initBarba() {
         if (window.animationsInstance) {
           window.animationsInstance.destroy();
         }
+        if (window.dynamicNavInstance) {
+          window.dynamicNavInstance.destroy();
+        }
         
         // Re-initialize scroll after a small delay
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -589,6 +770,10 @@ function initBarba() {
           const animations = new Animations();
           animations.init();
           window.animationsInstance = animations;
+
+          const dynamicNav = new DynamicIslandNav();
+          dynamicNav.init();
+          window.dynamicNavInstance = dynamicNav;
         }, 200);
         
         // Update page class
@@ -599,6 +784,9 @@ function initBarba() {
         // Clean up before leaving
         if (window.animationsInstance) {
           window.animationsInstance.destroy();
+        }
+        if (window.dynamicNavInstance) {
+          window.dynamicNavInstance.destroy();
         }
       }
     }],
@@ -662,6 +850,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     animations.init();
     window.animationsInstance = animations;
 
+    console.log('Initializing Dynamic Island Navigation...');
+    const dynamicNav = new DynamicIslandNav();
+    dynamicNav.init();
+    window.dynamicNavInstance = dynamicNav;
+
     // Initialize Barba
     console.log('Initializing page transitions...');
     initBarba();
@@ -707,6 +900,9 @@ window.addEventListener('beforeunload', () => {
   }
   if (window.animationsInstance) {
     window.animationsInstance.destroy();
+  }
+  if (window.dynamicNavInstance) {
+    window.dynamicNavInstance.destroy();
   }
 });
 
