@@ -48,7 +48,7 @@ function debounce(func, wait) {
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 function scrambleText(element, duration = 1) {
-  if (!element) return;
+  if (!element) return Promise.resolve();
   
   const originalText = element.textContent.trim();
   const length = originalText.length;
@@ -143,6 +143,11 @@ class Scroll {
   }
 
   syncScrollTrigger() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      console.warn('GSAP or ScrollTrigger not loaded');
+      return;
+    }
+
     gsap.registerPlugin(ScrollTrigger);
     
     ScrollTrigger.scrollerProxy(this.scrollContainer, {
@@ -180,8 +185,12 @@ class Scroll {
     
     const updateScroll = () => {
       if (this.instance) {
-        this.instance.update();
-        ScrollTrigger.refresh();
+        setTimeout(() => {
+          this.instance.update();
+          if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+          }
+        }, 100);
       }
     };
 
@@ -244,9 +253,11 @@ class Scroll {
       this.instance = null;
     }
     
-    ScrollTrigger.getAll().forEach(t => t.kill());
-    ScrollTrigger.clearMatchMedia();
-    ScrollTrigger.clearScrollMemory();
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.clearMatchMedia();
+      ScrollTrigger.clearScrollMemory();
+    }
   }
 }
 
@@ -306,16 +317,25 @@ class Preloader {
   init() {
     const preloader = document.querySelector('.c-preloader');
     if (!preloader) {
+      console.log('No preloader element found');
       document.documentElement.classList.remove('is-loading');
       return Promise.resolve();
     }
 
-    const text = preloader.querySelector('.c-preloader_text');
+    // Check for preloader text - try both class names
+    let text = preloader.querySelector('.c-preloader_text');
+    if (!text) {
+      text = preloader.querySelector('.c-preloader__text');
+    }
+    
     const tl = gsap.timeline();
     
-    // Scramble effect on preloader text
+    // Scramble effect on preloader text if it exists
     if (text) {
+      console.log('Animating preloader text');
       tl.add(scrambleText(text, 1.5));
+    } else {
+      console.warn('Preloader text element not found');
     }
     
     // Fade out preloader
@@ -323,9 +343,11 @@ class Preloader {
       opacity: 0,
       duration: 0.8,
       ease: "power2.out",
-      delay: 0.3,
+      delay: text ? 0.3 : 0,
       onComplete: () => {
+        console.log('Preloader animation complete');
         document.documentElement.classList.remove('is-loading');
+        preloader.style.display = 'none';
         preloader.remove();
       }
     });
@@ -340,11 +362,13 @@ class Animations {
   }
 
   init() {
+    if (typeof ScrollTrigger === 'undefined') {
+      console.warn('ScrollTrigger not loaded');
+      return;
+    }
+
     // Animate stats counters
     this.animateStats();
-    
-    // NO HERO PARALLAX - Removed to prevent sliding under
-    // this.heroParallax(); // REMOVED
     
     // Code copy buttons
     this.initCodeCopy();
@@ -465,9 +489,29 @@ class Animations {
 
 function initBarba() {
   if (typeof barba === 'undefined') {
-    console.warn('Barba.js not loaded');
+    console.warn('Barba.js not loaded - skipping page transitions');
     return;
   }
+
+  // Check for proper structure
+  const wrapper = document.querySelector('[data-barba="wrapper"]') || document.body;
+  const container = document.querySelector('[data-barba="container"]');
+  
+  if (!container) {
+    console.warn('Barba container not found - wrapping main content');
+    // Try to wrap existing content
+    const main = document.querySelector('main') || document.querySelector('[data-scroll-container]');
+    if (main && !main.hasAttribute('data-barba')) {
+      main.setAttribute('data-barba', 'container');
+      main.setAttribute('data-barba-namespace', 'home');
+    }
+  }
+
+  if (!wrapper.hasAttribute('data-barba')) {
+    wrapper.setAttribute('data-barba', 'wrapper');
+  }
+
+  console.log('Initializing Barba.js');
 
   barba.init({
     sync: true,
@@ -480,6 +524,8 @@ function initBarba() {
       async leave(data) {
         const done = this.async();
         
+        document.body.classList.add('is-transitioning');
+        
         // Fade out
         gsap.to(data.current.container, {
           opacity: 0,
@@ -491,6 +537,8 @@ function initBarba() {
       },
 
       async enter(data) {
+        document.body.classList.remove('is-transitioning');
+        
         // Scroll to top
         window.scrollTo(0, 0);
         
@@ -505,7 +553,9 @@ function initBarba() {
           window.animationsInstance.destroy();
         }
         
-        // Re-initialize scroll
+        // Re-initialize scroll after a small delay
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         const scroll = new Scroll();
         scroll.init();
         window.scrollInstance = scroll;
@@ -539,7 +589,7 @@ function initBarba() {
           const animations = new Animations();
           animations.init();
           window.animationsInstance = animations;
-        }, 100);
+        }, 200);
         
         // Update page class
         document.body.className = data.next.namespace || '';
@@ -551,6 +601,13 @@ function initBarba() {
           window.animationsInstance.destroy();
         }
       }
+    }],
+    
+    views: [{
+      namespace: 'home',
+      beforeEnter() {
+        console.log('Entering home page');
+      }
     }]
   });
 }
@@ -558,12 +615,19 @@ function initBarba() {
 // ── INITIALIZE ───────────────────────────────────────────
 
 window.addEventListener('DOMContentLoaded', async () => {
+  console.log('DOM Content Loaded - Initializing app');
+  
+  // Add is-loading class immediately
+  document.documentElement.classList.add('is-loading');
+  
   // Load dependencies
   try {
+    console.log('Loading dependencies...');
     await loadScripts(deps);
+    console.log('Dependencies loaded successfully');
   } catch (error) {
     console.error('Failed to load dependencies:', error);
-    // Continue with basic functionality
+    document.documentElement.classList.remove('is-loading');
     return;
   }
 
@@ -576,26 +640,33 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize core modules
   try {
+    console.log('Initializing preloader...');
     const preloader = new Preloader();
     await preloader.init();
 
+    console.log('Initializing smooth scroll...');
     const scroll = new Scroll();
     scroll.init();
     window.scrollInstance = scroll;
 
     // Delay header init to ensure scroll is ready
     setTimeout(() => {
+      console.log('Initializing header...');
       const header = new Header();
       header.init();
       window.headerInstance = header;
     }, 100);
 
+    console.log('Initializing animations...');
     const animations = new Animations();
     animations.init();
     window.animationsInstance = animations;
 
     // Initialize Barba
+    console.log('Initializing page transitions...');
     initBarba();
+    
+    console.log('App initialization complete');
   } catch (error) {
     console.error('Initialization error:', error);
     document.documentElement.classList.remove('is-loading');
@@ -607,7 +678,9 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden && window.locoScroll) {
     requestAnimationFrame(() => {
       window.locoScroll.update();
-      ScrollTrigger.refresh();
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
     });
   }
 });
@@ -636,3 +709,5 @@ window.addEventListener('beforeunload', () => {
     window.animationsInstance.destroy();
   }
 });
+
+console.log('App.js loaded and ready');
