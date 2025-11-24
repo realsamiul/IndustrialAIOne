@@ -9,7 +9,7 @@
 <body data-barba="wrapper">
 
     <div class="c-preloader">
-        <div class="c-preloader__text">Loading Harmonics...</div>
+        <div class="c-preloader__text">Reading Harmonics...</div>
     </div>
 
     <header class="c-header">
@@ -31,10 +31,10 @@
         <div data-scroll-container>
 
             <header class="c-hero" data-scroll-section>
-                <!-- Hero Visual 1 -->
                 <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
                     <div class="c-image -cover u-inset">
-                        <img src="assets/images/fail-predict1.webp" class="c-image_img" alt="Machinery Vibration" style="opacity: 0.3;">
+                        <!-- Visual: FFT Graph -->
+                        <img src="fail-predict1.webp" class="c-image_img" alt="FFT Vibration Spectrum" style="opacity: 0.4;">
                     </div>
                 </div>
 
@@ -56,13 +56,17 @@
                 <div class="o-container">
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-4/12@md">
-                            <h2 class="c-heading-small">The Leakage</h2>
-                             <!-- Visual 2 -->
-                            <img src="assets/images/fail-predict2.webp" alt="Downtime Statistics" class="u-margin-top-small" style="width: 100%; border-radius: 4px;">
+                            <h2 class="c-heading-small">The Hardware</h2>
+                             <!-- Visual: MPU on Motor -->
+                            <img src="fail-predict2.webp" alt="MPU-6050 Sensor on Motor" class="u-margin-top-small" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                            <p class="c-text-small u-margin-top-small" style="opacity: 0.6;">Fig 2: MPU-6050 Accelerometer on Industrial Motor</p>
                         </div>
                         <div class="o-grid__col u-7/12@md u-push-1/12@md">
                             <p class="c-text-body">
                                 Unplanned mechanical failure costs the sector <strong>$2.04B annually</strong>. Bearings seize, motors burn out, and lines stop. 
+                            </p>
+                            <p class="c-text-body">
+                                <strong>The Physics of Failure:</strong> Mechanical faults (like a pitted bearing) create specific vibration frequencies long before they generate heat or noise. By attaching a $1.60 MEMS sensor to the motor housing, we can detect these micro-harmonics.
                             </p>
                             <div class="o-grid u-margin-top-medium">
                                 <div class="o-grid__col u-4/12@md">
@@ -97,29 +101,25 @@
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Vibration Sensing</span>
                                     <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>MPU-6050 Accelerometer</strong>. Captures X, Y, Z axis acceleration to detect harmonics associated with bearing wear.
+                                        <strong>MPU-6050 Accelerometer</strong>. Captures X, Y, Z axis acceleration. We perform on-device Fast Fourier Transform (FFT) to convert this to a frequency spectrum.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Neural Core</span>
                                     <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>GRU-128 (Gated Recurrent Unit)</strong>. Trained on NASA CMAPSS jet engine data, transfer-learned for textile sewing heads.
+                                        <strong>GRU-128 (Gated Recurrent Unit)</strong>. Trained on NASA CMAPSS jet engine data, transfer-learned for textile sewing heads to predict RUL (Remaining Useful Life).
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Constraint Layer</span>
                                     <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>Pi-Transformer</strong>. Physics-informed layer that constrains predictions based on mechanical realities (friction/heat).
+                                        <strong>Pi-Transformer</strong>. A Physics-Informed layer that constrains predictions based on mechanical realities (e.g., friction coefficients), preventing AI hallucinations.
                                     </p>
                                 </li>
                             </ul>
                         </div>
 
                         <div class="o-grid__col u-7/12@md" data-scroll data-scroll-speed="1">
-                            <!-- Visual 3 -->
-                             <div class="u-margin-bottom-small">
-                                <img src="assets/images/fail-predict3.webp" alt="Vibration Sensor Data" style="width: 100%; border-radius: 4px; opacity: 0.9;">
-                            </div>
                             <div class="c-code-wrapper">
                                 <button class="c-code-copy" data-copy-target="code-fp">Copy</button>
                                 <pre class="c-code-block" id="code-fp">
@@ -132,17 +132,14 @@
     
     <span class="comment"># 3. Predict Remaining Useful Life (RUL)</span>
     rul_cycles = model(torch.from_numpy(vib_features))
-    rul_hours = rul_cycles * <span class="number">0.083</span>
     
     <span class="comment"># 4. Traffic Light Logic</span>
-    <span class="keyword">if</span> rul_hours < <span class="number">1</span>:
+    <span class="keyword">if</span> rul_cycles < <span class="number">100</span>:
         status = <span class="string">"CRITICAL_STOP"</span>
-    <span class="keyword">elif</span> rul_hours < <span class="number">4</span>:
+    <span class="keyword">elif</span> rul_cycles < <span class="number">500</span>:
         status = <span class="string">"WARNING_MAINTAIN_SOON"</span>
-    <span class="keyword">else</span>:
-        status = <span class="string">"NORMAL"</span>
         
-    <span class="keyword">return</span> {<span class="string">"rul_hours"</span>: round(rul_hours, <span class="number">2</span>), <span class="string">"status"</span>: status}
+    <span class="keyword">return</span> {<span class="string">"rul_hours"</span>: round(rul_cycles * 0.083, <span class="number">2</span>)}
                                 </pre>
                             </div>
                         </div>
@@ -225,7 +222,7 @@
         </div>
     </main>
 
-    <!-- Dynamic Island Trigger -->
+    <!-- Include Nav (Same as Index) -->
     <button class="c-nav-island" id="navIsland" aria-label="Open navigation menu">
       <div class="c-nav-island__icon">
         <svg class="c-nav-island__q-symbol" viewBox="0 0 100 100" fill="currentColor">
@@ -234,57 +231,22 @@
       </div>
       <div class="c-nav-island__label">MENU</div>
     </button>
-
-    <!-- Fullscreen Menu Overlay -->
     <div class="c-nav-menu" id="navMenu">
-      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-
+      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       <nav class="c-nav-menu__content">
         <ul class="c-nav-menu__list">
-          <li class="c-nav-menu__item">
-            <a href="index.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">Home</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="work.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">The Tools</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="qc-vision.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">QC Vision</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="power-guard.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">PowerGuard</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="fail-predict.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">FailPredict</span>
-            </a>
-          </li>
+          <li class="c-nav-menu__item"><a href="index.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">Home</span></a></li>
+          <li class="c-nav-menu__item"><a href="work.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">The Tools</span></a></li>
+          <li class="c-nav-menu__item"><a href="qc-vision.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">QC Vision</span></a></li>
+          <li class="c-nav-menu__item"><a href="power-guard.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">PowerGuard</span></a></li>
+          <li class="c-nav-menu__item"><a href="fail-predict.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">FailPredict</span></a></li>
         </ul>
       </nav>
-
-      <div class="c-nav-menu__footer">
-        <div>
-          <p>M0NARQ Industrial-AI.One</p>
-          <p>Chattogram, Bangladesh</p>
-        </div>
-        <div>
-          <a href="mailto:invest@monarq.ai">invest@monarq.ai</a>
-        </div>
-      </div>
+      <div class="c-nav-menu__footer"><div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div><div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div></div>
     </div>
 
     <script src="assets/js/app.js"></script>
 </body>
 </html>
+
+
