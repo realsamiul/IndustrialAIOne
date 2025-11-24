@@ -9,7 +9,7 @@
 <body data-barba="wrapper">
 
     <div class="c-preloader">
-        <div class="c-preloader__text">Reading Harmonics...</div>
+        <div class="c-preloader__text">Analyzing Harmonics...</div>
     </div>
 
     <header class="c-header">
@@ -33,7 +33,6 @@
             <header class="c-hero" data-scroll-section>
                 <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
                     <div class="c-image -cover u-inset">
-                        <!-- Visual: FFT Graph -->
                         <img src="fail-predict1.webp" class="c-image_img" alt="FFT Vibration Spectrum" style="opacity: 0.4;">
                     </div>
                 </div>
@@ -45,7 +44,7 @@
                             FailPredict
                         </h1>
                         <p class="c-hero__lead" data-scroll data-scroll-speed="1">
-                            Condition-based predictive maintenance. Listening to machine health.<br>
+                            Condition-based predictive maintenance via Physics-Informed AI.<br>
                             <span style="font-family: var(--font-tech); font-weight: 500; color: #E0E0E0;">5 Hour Warning. 9.2x ROI.</span>
                         </p>
                     </div>
@@ -57,28 +56,28 @@
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-4/12@md">
                             <h2 class="c-heading-small">The Hardware</h2>
-                             <!-- Visual: MPU on Motor -->
-                            <img src="fail-predict2.webp" alt="MPU-6050 Sensor on Motor" class="u-margin-top-small" style="width: 100%; border-radius: 4px; opacity: 0.9;">
-                            <p class="c-text-small u-margin-top-small" style="opacity: 0.6;">Fig 2: MPU-6050 Accelerometer on Industrial Motor</p>
+                             <!-- Visual: MPU Sensor on Motor -->
+                            <img src="fail-predict2.webp" alt="MPU-6050 Sensor on Motor Housing" class="u-margin-top-small" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                             <p class="c-text-small u-margin-top-small" style="opacity: 0.6;">Fig 2: MPU-6050 Accelerometer ($1.60) on Industrial Motor</p>
                         </div>
                         <div class="o-grid__col u-7/12@md u-push-1/12@md">
                             <p class="c-text-body">
-                                Unplanned mechanical failure costs the sector <strong>$2.04B annually</strong>. Bearings seize, motors burn out, and lines stop. 
+                                <strong>The Leakage:</strong> Unplanned mechanical failure costs the RMG sector <strong>$2.04B annually</strong>. Currently, parts are replaced either too early (waste) or too late (catastrophe/line stoppage).
                             </p>
                             <p class="c-text-body">
-                                <strong>The Physics of Failure:</strong> Mechanical faults (like a pitted bearing) create specific vibration frequencies long before they generate heat or noise. By attaching a $1.60 MEMS sensor to the motor housing, we can detect these micro-harmonics.
+                                <strong>The Physics of Failure:</strong> Mechanical faults (like a pitted bearing) create specific vibration frequencies long before they generate heat or noise. By attaching a $1.60 MEMS sensor to the motor housing, we can detect these micro-harmonics using Spectral Analysis.
                             </p>
                             <div class="o-grid u-margin-top-medium">
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Downtime Loss</span>
+                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Total Loss</span>
                                     <span class="c-heading-medium">$2.04B</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Prediction Horizon</span>
+                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Prediction</span>
                                     <span class="c-heading-medium">5 Hours</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">First Year ROI</span>
+                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Year 1 ROI</span>
                                     <span class="c-heading-medium">9.2x</span>
                                 </div>
                             </div>
@@ -92,28 +91,28 @@
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
                     <div class="c-section-header u-margin-bottom-large">
-                        <h2 class="c-heading-medium">Inference Pipeline</h2>
+                        <h2 class="c-heading-medium">Inference Logic</h2>
                     </div>
 
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-5/12@md">
                             <ul class="c-list-clean">
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Vibration Sensing</span>
-                                    <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>MPU-6050 Accelerometer</strong>. Captures X, Y, Z axis acceleration. We perform on-device Fast Fourier Transform (FFT) to convert this to a frequency spectrum.
+                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Feature Extraction</span>
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        <strong>Spectral Analysis (FFT)</strong>. We don't just look at magnitude; we look at frequency spikes. A spike at 500Hz often indicates a bearing race fault.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Neural Core</span>
-                                    <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>GRU-128 (Gated Recurrent Unit)</strong>. Trained on NASA CMAPSS jet engine data, transfer-learned for textile sewing heads to predict RUL (Remaining Useful Life).
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        <strong>GRU-128 (Gated Recurrent Unit)</strong>. Trained on NASA CMAPSS jet engine data, then Transfer-Learned for textile sewing heads to predict Remaining Useful Life (RUL) in hours.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Constraint Layer</span>
-                                    <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>Pi-Transformer</strong>. A Physics-Informed layer that constrains predictions based on mechanical realities (e.g., friction coefficients), preventing AI hallucinations.
+                                    <span class="c-heading-small" style="color:#E0E0E0; font-size:0.8rem; text-transform:uppercase;">Physics Constraint</span>
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        <strong>Pi-Transformer</strong>. A physics-informed layer that constrains predictions based on mechanical realities (e.g., friction coefficients), preventing AI hallucinations.
                                     </p>
                                 </li>
                             </ul>
@@ -130,16 +129,17 @@
     <span class="comment"># 2. Extract Spectral Features (FFT)</span>
     vib_features = extract_features(sensor_data[<span class="string">'vibration'</span>])
     
-    <span class="comment"># 3. Predict Remaining Useful Life (RUL)</span>
-    rul_cycles = model(torch.from_numpy(vib_features))
+    <span class="comment"># 3. Physics-Informed Constraint</span>
+    rul_raw = model(torch.from_numpy(vib_features))
+    rul_constrained = pi_transformer(rul_raw)
     
     <span class="comment"># 4. Traffic Light Logic</span>
-    <span class="keyword">if</span> rul_cycles < <span class="number">100</span>:
+    <span class="keyword">if</span> rul_constrained < <span class="number">1.0</span>:
         status = <span class="string">"CRITICAL_STOP"</span>
-    <span class="keyword">elif</span> rul_cycles < <span class="number">500</span>:
+    <span class="keyword">elif</span> rul_constrained < <span class="number">4.0</span>:
         status = <span class="string">"WARNING_MAINTAIN_SOON"</span>
         
-    <span class="keyword">return</span> {<span class="string">"rul_hours"</span>: round(rul_cycles * 0.083, <span class="number">2</span>)}
+    <span class="keyword">return</span> {<span class="string">"rul_hours"</span>: round(rul_constrained, <span class="number">2</span>)}
                                 </pre>
                             </div>
                         </div>
@@ -231,8 +231,15 @@
       </div>
       <div class="c-nav-island__label">MENU</div>
     </button>
+
     <div class="c-nav-menu" id="navMenu">
-      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
       <nav class="c-nav-menu__content">
         <ul class="c-nav-menu__list">
           <li class="c-nav-menu__item"><a href="index.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">Home</span></a></li>
@@ -242,7 +249,11 @@
           <li class="c-nav-menu__item"><a href="fail-predict.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">FailPredict</span></a></li>
         </ul>
       </nav>
-      <div class="c-nav-menu__footer"><div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div><div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div></div>
+
+      <div class="c-nav-menu__footer">
+        <div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div>
+        <div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div>
+      </div>
     </div>
 
     <script src="assets/js/app.js"></script>
