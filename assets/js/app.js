@@ -571,6 +571,10 @@ class DynamicIslandNav {
 
     // Disable scroll
     document.body.classList.add('menu-active');
+    
+    // FIX: Add is-active class to menu to enable pointer-events
+    this.menu.classList.add('is-active');
+    
     if (window.locoScroll) {
       window.locoScroll.stop();
     }
@@ -623,6 +627,9 @@ class DynamicIslandNav {
     const closeTimeline = gsap.timeline({
       onComplete: () => {
         document.body.classList.remove('menu-active');
+        // FIX: Remove is-active class after animation to disable pointer-events
+        this.menu.classList.remove('is-active');
+        
         if (window.locoScroll) {
           window.locoScroll.start();
         }
@@ -907,3 +914,5 @@ window.addEventListener('beforeunload', () => {
 });
 
 console.log('App.js loaded and ready');
+
+
