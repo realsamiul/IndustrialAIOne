@@ -8,9 +8,8 @@
 </head>
 <body data-barba="wrapper">
 
-    <!-- PRELOADER -->
     <div class="c-preloader">
-        <div class="c-preloader__text">Loading Modules...</div>
+        <div class="c-preloader__text">Deploying Assets...</div>
     </div>
 
     <header class="c-header">
@@ -20,7 +19,7 @@
                 <nav class="c-nav">
                     <ul class="c-nav__list">
                         <li class="c-nav__item"><a href="index.html" class="c-nav__link">Home</a></li>
-                        <li class="c-nav__item"><a href="work.html" class="c-nav__link is-active">The Tools</a></li>
+                        <li class="c-nav__item"><a href="work.html" class="c-nav__link is-active">The Platform</a></li>
                     </ul>
                 </nav>
             </div>
@@ -31,45 +30,46 @@
         <div data-scroll-container>
 
             <header class="c-hero c-hero--small" data-scroll-section>
-                <!-- Hero Visual 1 -->
                 <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
                     <div class="c-image -cover u-inset">
-                        <img src="assets/images/work1.webp" class="c-image_img" alt="Module Ecosystem" style="opacity: 0.2;">
+                        <!-- Visual: The "Knolling" Shot of the Kit -->
+                        <img src="work1.webp" class="c-image_img" alt="Industrial-AI.One Hardware Kit" style="opacity: 0.6;">
                     </div>
                 </div>
 
                 <div class="o-container">
                     <div class="c-hero__content">
-                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Core Modules</span>
+                        <span class="c-hero__eyebrow" data-scroll data-scroll-speed="1">Product Suite</span>
                         <h1 class="c-hero__title" data-scroll data-scroll-speed="1.2">
                             Edge-Native<br>Intelligence
                         </h1>
                         <p class="c-hero__lead" data-scroll data-scroll-speed="0.5">
-                            Three drop-in AI modules. Zero cloud dependency.<br>
-                            $150 hardware BOM. 47-day ROI.
+                            Three drop-in AI modules. Zero cloud dependency.
+                            <br><strong>$150 Hardware BOM*. 47-day ROI.</strong>
+                            <br><br>
+                            <em style="font-size: 0.7em; opacity: 0.6; display:block;">*BOM (Bill of Materials): The total cost of the raw components required to build the system.</em>
                         </p>
                     </div>
                 </div>
             </header>
 
-            <!-- QC VISION SECTION -->
+            <!-- QC VISION -->
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <!-- Visual 2 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
                                 <div class="u-margin-bottom-small">
-                                    <img src="assets/images/work2.webp" alt="QC Vision Hardware" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                    <img src="qc-vision1.webp" alt="MicroViT Neural Architecture" style="width: 100%; border-radius: 4px; opacity: 0.9;">
                                 </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
-                                    <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE ARCHITECTURE</span>
+                                    <span class="c-heading-small" style="color: var(--color-accent); display:block; margin-bottom:1rem; font-size:0.8rem;">PIPELINE SPEC</span>
                                     <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Input: 224x224 RGB Stream<br>
                                     Backbone: <span class="u-text-teal">MicroViT-Tiny-Q8</span> (28ms)<br>
                                     Decoder: <span class="u-text-teal">PicoSAM-2</span> (Promptable)<br>
-                                    Output: Binary Mask + Class<br>
+                                    Output: Binary Mask + Export Class<br>
                                     Hardware: RPi 5 / Android (Snapdragon)
                                     </div>
                                 </div>
@@ -80,23 +80,15 @@
                             <span class="c-tag">Module 01</span>
                             <h2 class="c-heading-medium u-margin-bottom-small">QC Vision</h2>
                             <p class="c-text-body">
-                                <strong>The Problem:</strong> Manual QC misses 3-5% of defects, costing the industry $390M/yr. Cloud solutions fail due to latency (>3s) and bandwidth costs.
+                                <strong>The Leakage:</strong> Manual QC misses 3-5% of defects, costing the industry $390M/yr. Cloud solutions fail due to latency (>3s) and bandwidth costs.
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> A quantization-first approach. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains and needle holes in &lt;90ms.
+                                <strong>The Fix:</strong> A quantization-first approach*. We run 8-bit Vision Transformers locally. The model "snaps" to defects like oil stains in &lt;90ms.
+                                <br><br>
+                                <em style="font-size: 0.75em; opacity: 0.6;">*Quantization: Compressing an AI model to make it run faster on cheap hardware without losing significant accuracy.</em>
                             </p>
-                            <div class="c-stats-grid u-margin-top-medium">
-                                <div class="c-stat">
-                                    <span class="c-stat__value">38%</span>
-                                    <span class="c-stat__label">Defect Reduction</span>
-                                </div>
-                                <div class="c-stat">
-                                    <span class="c-stat__value">9ms</span>
-                                    <span class="c-stat__label">Inference Time</span>
-                                </div>
-                            </div>
                             <a href="qc-vision.html" class="c-button c-button--primary u-margin-top-medium">
-                                View Technical Spec
+                                Technical Spec
                             </a>
                         </div>
                     </div>
@@ -105,19 +97,18 @@
 
             <hr class="c-divider" data-scroll-section>
 
-            <!-- POWERGUARD SECTION -->
+            <!-- POWERGUARD -->
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
                     <div class="o-grid o-grid--middle o-grid--reverse">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <!-- Visual 3 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
                                 <div class="u-margin-bottom-small">
-                                    <img src="assets/images/work3.webp" alt="PowerGuard Dashboard" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                    <img src="power-guard1.webp" alt="TS2Vec Data Visualization" style="width: 100%; border-radius: 4px; opacity: 0.9;">
                                 </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
-                                    <span class="c-heading-small" style="color: var(--color-accent-pg); display:block; margin-bottom:1rem; font-size:0.8rem;">DATA STREAM ANALYSIS</span>
+                                    <span class="c-heading-small" style="color: var(--color-accent-pg); display:block; margin-bottom:1rem; font-size:0.8rem;">DATA STREAM SPEC</span>
                                     <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: PZEM-004T + ESP32 @ 1Hz<br>
                                     Algorithm: <span style="color: var(--color-accent-pg);">TS2Vec + MOMEMTO Gate</span><br>
@@ -133,23 +124,15 @@
                             <span class="c-tag">Module 02</span>
                             <h2 class="c-heading-medium u-margin-bottom-small">PowerGuard</h2>
                             <p class="c-text-body">
-                                <strong>The Problem:</strong> Energy is 15% of production cost. Grid instability forces reliance on expensive diesel ($0.32/kWh). EU CBAM requires audits by 2026.
+                                <strong>The Leakage:</strong> Energy is 15% of production cost. Grid instability forces reliance on expensive diesel ($0.32/kWh).
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> We treat power as a high-frequency time series. The system learns the "heartbeat" of a dye line and predicts spikes 180 seconds before they happen, allowing for automated peak shaving.
+                                <strong>The Fix:</strong> We treat power as a high-frequency time series. The system predicts spikes 180 seconds in advance, allowing for automated "Peak Shaving"* of non-critical loads.
+                                <br><br>
+                                <em style="font-size: 0.75em; opacity: 0.6;">*Peak Shaving: Reducing power usage during expensive peak-tariff hours to avoid penalties.</em>
                             </p>
-                            <div class="c-stats-grid u-margin-top-medium">
-                                <div class="c-stat">
-                                    <span class="c-stat__value">15%</span>
-                                    <span class="c-stat__label">Energy Saved</span>
-                                </div>
-                                <div class="c-stat">
-                                    <span class="c-stat__value">180s</span>
-                                    <span class="c-stat__label">Spike Warning</span>
-                                </div>
-                            </div>
                             <a href="power-guard.html" class="c-button c-button--primary u-margin-top-medium">
-                                View Technical Spec
+                                Technical Spec
                             </a>
                         </div>
 
@@ -159,19 +142,18 @@
 
             <hr class="c-divider" data-scroll-section>
 
-            <!-- FAILPREDICT SECTION -->
+            <!-- FAILPREDICT -->
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
                     <div class="o-grid o-grid--middle">
                         
                         <div class="o-grid__col u-6/12@md u-margin-bottom-medium@sm">
-                            <!-- Visual 4 -->
                             <div class="c-code-wrapper" data-scroll data-scroll-speed="-1">
                                 <div class="u-margin-bottom-small">
-                                    <img src="assets/images/work4.webp" alt="FailPredict Sensors" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                    <img src="fail-predict1.webp" alt="FFT Harmonic Analysis" style="width: 100%; border-radius: 4px; opacity: 0.9;">
                                 </div>
                                 <div class="c-code-block" style="padding: 1.5rem;">
-                                    <span class="c-heading-small" style="color: var(--color-accent-fp); display:block; margin-bottom:1rem; font-size:0.8rem;">VIBRATION ANALYTICS</span>
+                                    <span class="c-heading-small" style="color: var(--color-accent-fp); display:block; margin-bottom:1rem; font-size:0.8rem;">VIBRATION SPEC</span>
                                     <div style="font-family: var(--font-tech); font-size: 0.85rem; line-height: 1.6; color: #a9b7c6;">
                                     Sensor: MPU-6050 (X,Y,Z Accel)<br>
                                     Model: <span style="color: var(--color-accent-fp);">GRU-128 (NASA CMAPSS)</span><br>
@@ -187,39 +169,39 @@
                             <span class="c-tag">Module 03</span>
                             <h2 class="c-heading-medium u-margin-bottom-small">FailPredict</h2>
                             <p class="c-text-body">
-                                <strong>The Problem:</strong> Unplanned mechanical downtime costs the sector $2.04B annually. Parts are replaced too early (waste) or too late (catastrophe).
+                                <strong>The Leakage:</strong> Unplanned downtime costs $2.04B annually. Parts are replaced too early (waste) or too late (catastrophe).
                             </p>
                             <p class="c-text-body">
-                                <strong>The Fix:</strong> Condition-based maintenance. By analyzing vibration harmonics, we predict bearing and motor failure 5 hours in advance.
+                                <strong>The Fix:</strong> Condition-based maintenance. By analyzing vibration harmonics (FFT*), we predict bearing and motor failure 5 hours in advance.
+                                <br><br>
+                                <em style="font-size: 0.75em; opacity: 0.6;">*FFT (Fast Fourier Transform): A mathematical method to break down a vibration signal into its component frequencies to find faults.</em>
                             </p>
-                            <div class="c-stats-grid u-margin-top-medium">
-                                <div class="c-stat">
-                                    <span class="c-stat__value">5hr</span>
-                                    <span class="c-stat__label">Failure Horizon</span>
-                                </div>
-                                <div class="c-stat">
-                                    <span class="c-stat__value">9.2x</span>
-                                    <span class="c-stat__label">Year 1 ROI</span>
-                                </div>
-                            </div>
                             <a href="fail-predict.html" class="c-button c-button--primary u-margin-top-medium">
-                                View Technical Spec
+                                Technical Spec
                             </a>
                         </div>
-
                     </div>
                 </div>
             </section>
 
-            <section class="c-section u-padding-vertical-xlarge u-bg-dark" data-scroll-section>
-                <div class="o-container u-text-center">
-                    <h2 class="c-heading-large u-text-white" data-scroll data-scroll-speed="1">Deploy Tomorrow.</h2>
-                    <p class="c-text-body u-text-white u-opacity-70 u-margin-bottom-medium" style="margin: 0 auto 2rem auto;">
-                        Complete source code and BOM available for investor review.
-                    </p>
-                    <a href="mailto:invest@monarq.ai" class="c-button c-button--primary" style="border-color:white; color:white;">
-                        Request The Deck
-                    </a>
+            <!-- RASPBERRY PI DETAIL SECTION -->
+             <section class="c-section u-padding-vertical-large" data-scroll-section>
+                <div class="o-container">
+                    <div class="o-grid o-grid--middle">
+                        <div class="o-grid__col u-5/12@md">
+                             <h2 class="c-heading-small">The Brain</h2>
+                            <img src="work2.webp" alt="Raspberry Pi 5 Industrial Node" style="width: 100%; border-radius: 4px;">
+                        </div>
+                        <div class="o-grid__col u-6/12@md u-push-1/12@md">
+                             <h3 class="c-heading-medium">The Edge Node</h3>
+                             <p class="c-text-body">
+                                 This is a <strong>Raspberry Pi 5</strong>. It costs $90 USD. It contains a quad-core 2.4GHz processor capable of running our 8-bit quantized AI models locally.
+                             </p>
+                             <p class="c-text-body">
+                                 By moving the "Brain" to the machine edge, we eliminate the need for expensive servers and guarantee data privacy—images are processed in RAM and never leave the factory floor.
+                             </p>
+                        </div>
+                    </div>
                 </div>
             </section>
             
@@ -230,6 +212,9 @@
                             <span class="c-header__logo-text">M0NARQ</span>
                             <p class="c-text-small u-margin-top-small">Chattogram, Bangladesh.</p>
                         </div>
+                        <div class="c-footer__links">
+                             <a href="mailto:invest@monarq.ai" class="c-footer__link">Request Deck</a>
+                        </div>
                     </div>
                 </div>
             </footer>
@@ -237,7 +222,7 @@
         </div>
     </main>
 
-    <!-- Dynamic Island Trigger -->
+    <!-- Nav Includes (Same as Index) -->
     <button class="c-nav-island" id="navIsland" aria-label="Open navigation menu">
       <div class="c-nav-island__icon">
         <svg class="c-nav-island__q-symbol" viewBox="0 0 100 100" fill="currentColor">
@@ -246,57 +231,22 @@
       </div>
       <div class="c-nav-island__label">MENU</div>
     </button>
-
-    <!-- Fullscreen Menu Overlay -->
     <div class="c-nav-menu" id="navMenu">
-      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-
+      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       <nav class="c-nav-menu__content">
         <ul class="c-nav-menu__list">
-          <li class="c-nav-menu__item">
-            <a href="index.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">Home</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="work.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">The Tools</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="qc-vision.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">QC Vision</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="power-guard.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">PowerGuard</span>
-            </a>
-          </li>
-          <li class="c-nav-menu__item">
-            <a href="fail-predict.html" class="c-nav-menu__link" data-nav-link>
-              <span class="c-nav-menu__link-text">FailPredict</span>
-            </a>
-          </li>
+          <li class="c-nav-menu__item"><a href="index.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">Home</span></a></li>
+          <li class="c-nav-menu__item"><a href="work.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">The Platform</span></a></li>
+          <li class="c-nav-menu__item"><a href="qc-vision.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">QC Vision</span></a></li>
+          <li class="c-nav-menu__item"><a href="power-guard.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">PowerGuard</span></a></li>
+          <li class="c-nav-menu__item"><a href="fail-predict.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">FailPredict</span></a></li>
         </ul>
       </nav>
-
-      <div class="c-nav-menu__footer">
-        <div>
-          <p>M0NARQ Industrial-AI.One</p>
-          <p>Chattogram, Bangladesh</p>
-        </div>
-        <div>
-          <a href="mailto:invest@monarq.ai">invest@monarq.ai</a>
-        </div>
-      </div>
+      <div class="c-nav-menu__footer"><div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div><div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div></div>
     </div>
 
     <script src="assets/js/app.js"></script>
 </body>
 </html>
+
+
