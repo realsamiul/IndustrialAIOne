@@ -92,6 +92,7 @@ class Scroll {
     // Clean up any existing instance
     if (window.locoScroll) {
       window.locoScroll.destroy();
+      window.locoScroll = null;
     }
 
     this.scrollContainer = document.querySelector('[data-scroll-container]');
@@ -100,12 +101,14 @@ class Scroll {
       return;
     }
 
+    console.log('Initializing Locomotive Scroll on:', this.scrollContainer);
+
     // Initialize with better momentum settings
     this.instance = new LocomotiveScroll({
       el: this.scrollContainer,
       smooth: true,
-      multiplier: 1.2,  // Increased for more momentum
-      lerp: 0.06,       // Decreased for smoother, longer scroll
+      multiplier: 1.2,
+      lerp: 0.06,
       class: 'is-inview',
       offset: ['30%', 0],
       repeat: false,
@@ -524,11 +527,12 @@ class DynamicIslandNav {
       }
     });
 
-    // Close on link click (for smooth transitions)
+    // Handle menu link clicks
     this.menuLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        // Only close if it's the same page (for anchor links)
         const href = link.getAttribute('href');
+        
+        // If it's an anchor link on the same page
         if (href.startsWith('#')) {
           e.preventDefault();
           this.close();
@@ -544,7 +548,8 @@ class DynamicIslandNav {
             }
           }, 600);
         } else {
-          // For page navigation, close menu with delay
+          // For page navigation, just close menu
+          // Let Barba handle the page transition
           this.close();
         }
       });
@@ -569,10 +574,10 @@ class DynamicIslandNav {
     if (this.isOpen) return;
     this.isOpen = true;
 
+    console.log('Opening menu');
+
     // Disable scroll
     document.body.classList.add('menu-active');
-    
-    // FIX: Add is-active class to menu to enable pointer-events
     this.menu.classList.add('is-active');
     
     if (window.locoScroll) {
@@ -623,11 +628,12 @@ class DynamicIslandNav {
     if (!this.isOpen) return;
     this.isOpen = false;
 
+    console.log('Closing menu');
+
     // Create closing animation timeline
     const closeTimeline = gsap.timeline({
       onComplete: () => {
         document.body.classList.remove('menu-active');
-        // FIX: Remove is-active class after animation to disable pointer-events
         this.menu.classList.remove('is-active');
         
         if (window.locoScroll) {
@@ -667,6 +673,9 @@ class DynamicIslandNav {
       this.timeline.kill();
     }
     document.body.classList.remove('menu-active');
+    if (this.menu) {
+      this.menu.classList.remove('is-active');
+    }
   }
 }
 
@@ -678,36 +687,29 @@ function initBarba() {
     return;
   }
 
-  // Check for proper structure
-  const wrapper = document.querySelector('[data-barba="wrapper"]') || document.body;
-  const container = document.querySelector('[data-barba="container"]');
-  
-  if (!container) {
-    console.warn('Barba container not found - wrapping main content');
-    // Try to wrap existing content
-    const main = document.querySelector('main') || document.querySelector('[data-scroll-container]');
-    if (main && !main.hasAttribute('data-barba')) {
-      main.setAttribute('data-barba', 'container');
-      main.setAttribute('data-barba-namespace', 'home');
-    }
-  }
-
-  if (!wrapper.hasAttribute('data-barba')) {
-    wrapper.setAttribute('data-barba', 'wrapper');
-  }
-
   console.log('Initializing Barba.js');
 
   barba.init({
     sync: true,
-    debug: false,
+    debug: true, // Enable debug for troubleshooting
     timeout: 7000,
+    prevent: ({ el }) => {
+      // Prevent Barba from handling anchor links
+      return el.getAttribute('href').startsWith('#');
+    },
     
     transitions: [{
       name: 'default',
       
       async leave(data) {
+        console.log('Leaving page:', data.current.url.href);
         const done = this.async();
+        
+        // Close menu if open
+        if (window.dynamicNavInstance && window.dynamicNavInstance.isOpen) {
+          window.dynamicNavInstance.close();
+          await new Promise(resolve => setTimeout(resolve, 400));
+        }
         
         document.body.classList.add('is-transitioning');
         
@@ -722,12 +724,13 @@ function initBarba() {
       },
 
       async enter(data) {
-        document.body.classList.remove('is-transitioning');
+        console.log('Entering page:', data.next.url.href);
         
         // Scroll to top
         window.scrollTo(0, 0);
         
         // Destroy previous instances
+        console.log('Destroying previous instances...');
         if (window.scrollInstance) {
           window.scrollInstance.destroy();
         }
@@ -741,35 +744,36 @@ function initBarba() {
           window.dynamicNavInstance.destroy();
         }
         
-        // Re-initialize scroll after a small delay
+        // Wait for DOM to settle
         await new Promise(resolve => setTimeout(resolve, 100));
         
+        // FIX: Set container to visible immediately to prevent white screen
+        const container = data.next.container;
+        gsap.set(container, { opacity: 1, y: 0 });
+        
+        // Remove transitioning class
+        document.body.classList.remove('is-transitioning');
+        
+        console.log('Re-initializing scroll...');
         const scroll = new Scroll();
         scroll.init();
         window.scrollInstance = scroll;
         
-        // Animate in
-        const container = data.next.container;
+        // Animate hero title if present
         const heroTitle = container.querySelector('.c-hero__title');
-        
-        gsap.set(container, { opacity: 0, y: 30 });
         
         const tl = gsap.timeline();
         
-        tl.to(container, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out"
-        });
-        
         // Scramble hero title
         if (heroTitle) {
-          tl.add(scrambleText(heroTitle, 1.2), "-=0.4");
+          console.log('Animating hero title');
+          tl.add(scrambleText(heroTitle, 1.2));
         }
         
         // Re-init modules with delay
         setTimeout(() => {
+          console.log('Re-initializing modules...');
+          
           const header = new Header();
           header.init();
           window.headerInstance = header;
@@ -781,6 +785,8 @@ function initBarba() {
           const dynamicNav = new DynamicIslandNav();
           dynamicNav.init();
           window.dynamicNavInstance = dynamicNav;
+          
+          console.log('All modules re-initialized');
         }, 200);
         
         // Update page class
@@ -788,20 +794,11 @@ function initBarba() {
       },
 
       async beforeLeave() {
+        console.log('Before leave hook');
         // Clean up before leaving
         if (window.animationsInstance) {
           window.animationsInstance.destroy();
         }
-        if (window.dynamicNavInstance) {
-          window.dynamicNavInstance.destroy();
-        }
-      }
-    }],
-    
-    views: [{
-      namespace: 'home',
-      beforeEnter() {
-        console.log('Entering home page');
       }
     }]
   });
@@ -914,5 +911,3 @@ window.addEventListener('beforeunload', () => {
 });
 
 console.log('App.js loaded and ready');
-
-
