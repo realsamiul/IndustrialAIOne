@@ -9,7 +9,7 @@
 <body data-barba="wrapper">
 
     <div class="c-preloader">
-        <div class="c-preloader__text">Loading Vision...</div>
+        <div class="c-preloader__text">Loading MicroViT...</div>
     </div>
 
     <header class="c-header">
@@ -33,7 +33,6 @@
             <header class="c-hero" data-scroll-section>
                 <div class="c-hero__background u-inset" data-scroll data-scroll-speed="-0.5">
                     <div class="c-image -cover u-inset">
-                        <!-- Visual: MicroViT Diagram -->
                         <img src="qc-vision1.webp" class="c-image_img" alt="MicroViT Architecture" style="opacity: 0.4;">
                     </div>
                 </div>
@@ -45,7 +44,7 @@
                             QC Vision
                         </h1>
                         <p class="c-hero__lead" data-scroll data-scroll-speed="1">
-                            Real-time fabric defect detection running on commodity edge hardware. <br>
+                            Real-time fabric defect detection on commodity edge hardware. <br>
                             <span style="font-family: var(--font-tech); font-weight: 500; color: #009CA6;">28ms Inference. 92% F1 Score.</span>
                         </p>
                     </div>
@@ -56,29 +55,30 @@
                 <div class="o-container">
                     <div class="o-grid o-grid--middle">
                         <div class="o-grid__col u-5/12@md">
-                            <h2 class="c-heading-small">Hardware Reality</h2>
-                            <!-- Visual: Recycled Phone -->
-                            <img src="qc-vision2.webp" alt="Recycled Android Sensor on Clamp" class="u-margin-top-small" style="width: 100%; border-radius: 4px; opacity: 0.9;">
-                            <p class="c-text-small u-margin-top-small" style="opacity: 0.6;">Fig 2: Recycled Smartphone as Vision Sensor (Zero-CAPEX model)</p>
+                            <h2 class="c-heading-small">Frugal Innovation</h2>
+                            <div class="c-image u-margin-top-small" data-scroll data-scroll-speed="0.5">
+                                <img src="qc-vision2.webp" alt="Recycled Android Sensor" style="width: 100%; border-radius: 4px; opacity: 0.9;">
+                                <p class="c-text-small u-margin-top-small" style="opacity: 0.6;">Fig 2: Recycled Android Smartphone as Vision Sensor (Zero-CAPEX model)</p>
+                            </div>
                         </div>
                         <div class="o-grid__col u-6/12@md u-push-1/12@md">
                             <p class="c-text-body">
-                                <strong>The Leakage:</strong> RMG factories lose <strong>3-5% of total yardage</strong> to defects. Current solutions are polarized: manual inspection (slow, error-prone) or imported AOI rigs (KeyeTech/Kevision) that cost &gt;$12,000 and are hardware-locked.
+                                <strong>The Leakage:</strong> RMG factories in Bangladesh lose <strong>3-5% of total yardage</strong> to defects like oil stains, slubs, and misprints. Current market options are binary: slow manual inspection or imported AOI rigs (KeyeTech/Kevision) that cost >$12,000 and are hardware-locked.
                             </p>
                             <p class="c-text-body">
-                                <strong>The Innovation:</strong> By utilizing recycled Android smartphones as sensors, we leverage high-quality camera optics and Snapdragon processors for a fraction of the cost. This "Frugal Innovation" lowers CAPEX to under $150 per line.
+                                <strong>The Disruption:</strong> By utilizing recycled Android smartphones (Snapdragon 778G+ processors) as vision sensors, we lower the CAPEX from $12,000 to ~$150. We process locally to ensure data sovereignty and zero latency.
                             </p>
                             <div class="o-grid u-margin-top-medium">
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Lost Value</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Annual Loss</span>
                                     <span class="c-heading-medium">$390M</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Defect Reduction</span>
-                                    <span class="c-heading-medium">-38%</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Model Size</span>
+                                    <span class="c-heading-medium">9M Params</span>
                                 </div>
                                 <div class="o-grid__col u-4/12@md">
-                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Payback Period</span>
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Break Even</span>
                                     <span class="c-heading-medium">47 Days</span>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
             <section class="c-section u-padding-vertical-large" data-scroll-section>
                 <div class="o-container">
                     <div class="c-section-header u-margin-bottom-large">
-                        <h2 class="c-heading-medium">Edge Architecture</h2>
+                        <h2 class="c-heading-medium">The Technical Stack</h2>
                     </div>
 
                     <div class="o-grid o-grid--middle">
@@ -98,14 +98,20 @@
                             <ul class="c-list-clean">
                                 <li class="u-margin-bottom-medium">
                                     <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Backbone Model</span>
-                                    <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>MicroViT-Tiny-Q8</strong> (Quantized). 9M parameters. Replaced DINO-v2-Small for 3.6x speedup on CPU. *Quantization allows complex models to run on simpler chips by reducing precision without losing accuracy.*
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        <strong>MicroViT-Tiny-Q8</strong> (Quantized). We utilize 8-bit integer quantization to run Vision Transformers on CPUs. This replaces heavy DINO-v2 models, achieving a 3.6x speedup (28ms per frame) while maintaining F1 scores within -1 point on MVTec AD v2 fabric datasets.
                                     </p>
                                 </li>
                                 <li class="u-margin-bottom-medium">
-                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Segmentation</span>
-                                    <p class="c-text-small" style="margin-top:0.5rem;">
-                                        <strong>PicoSAM-2</strong>. Promptable mask generation allows "Human-in-the-Loop" labeling by QA managers. They simply tap a defect on the tablet to teach the system.
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Zero-Shot Segmentation</span>
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        <strong>PicoSAM-2</strong>. Enables "Human-in-the-Loop" workflow. A QA manager can tap a defect on the tablet, and the model instantly "snaps" a mask to it, refining the dataset locally without needing a data scientist.
+                                    </p>
+                                </li>
+                                <li class="u-margin-bottom-medium">
+                                    <span class="c-heading-small" style="color:#009CA6; font-size:0.8rem; text-transform:uppercase;">Privacy & Logs</span>
+                                    <p class="c-text-body" style="margin-top:0.5rem;">
+                                        All imagery is processed in RAM. Only the metadata (defect class, timestamp, coordinates) is logged to a local DuckDB instance for generating EU Digital Product Passports (DPP).
                                     </p>
                                 </li>
                             </ul>
@@ -115,20 +121,30 @@
                             <div class="c-code-wrapper">
                                 <button class="c-code-copy" data-copy-target="code-qc">Copy</button>
                                 <pre class="c-code-block" id="code-qc">
-<span class="keyword">class</span> <span class="function">QCModel</span>:
-    <span class="keyword">def</span> <span class="function">predict</span>(self, img_stream):
-        <span class="comment"># 1. Load 8-bit Quantized ONNX Model</span>
-        session = ort.InferenceSession(<span class="string">"models/microvit_q8.onnx"</span>)
+<span class="keyword">@app.cls</span>(gpu=<span class="string">"T4"</span>)
+<span class="keyword">class</span> <span class="function">DefectDetector</span>:
+    <span class="keyword">def</span> <span class="function">__enter__</span>(self):
+        <span class="comment"># Load 8-bit Quantized ONNX Weights</span>
+        vit_path = hf_download(<span class="string">"ai-one/microvit-cloth-q8"</span>)
+        self.vit = ort.InferenceSession(vit_path)
         
-        <span class="comment"># 2. Vision Transformer Feature Extraction</span>
-        feat = session.run(<span class="keyword">None</span>, {<span class="string">"input"</span>: img_stream})[0]
-        
-        <span class="comment"># 3. Generate Defect Mask (PicoSAM)</span>
-        mask = self.sam_decoder.run(feat)
+        <span class="comment"># Hybrid: YOLOv8 Nano for classification + SAM for Mask</span>
+        self.yolo = YOLO(<span class="string">"/models/yolov8n-fabric.pt"</span>)
 
+    <span class="keyword">def</span> <span class="function">detect</span>(self, img_array):
+        results = self.yolo(img_array)
+        grade = <span class="string">"A"</span>
+        
+        <span class="keyword">for</span> r <span class="keyword">in</span> results:
+            <span class="comment"># Economic logic: Reject roll if Critical</span>
+            severity = self.severity_map.get(r.defect_type)
+            <span class="keyword">if</span> severity == <span class="string">"critical"</span>:
+                grade = <span class="string">"D"</span> 
+                
         <span class="keyword">return</span> {
-            <span class="string">"defect_detected"</span>: bool(mask.mean() > 0.07),
-            <span class="string">"quality_grade"</span>: <span class="string">"REJECT"</span> <span class="keyword">if</span> mask.mean() > 0.2 <span class="keyword">else</span> <span class="string">"PASS"</span>
+            <span class="string">"quality_grade"</span>: grade,
+            <span class="string">"export_eligible"</span>: grade <span class="keyword">in</span> [<span class="string">"A"</span>, <span class="string">"B"</span>],
+            <span class="string">"loss_usd"</span>: self.calc_loss(grade)
         }
                                 </pre>
                             </div>
@@ -153,7 +169,7 @@
         </div>
     </main>
 
-    <!-- Include Nav (Same as Index) -->
+     <!-- Include Nav (Same as Index) -->
     <button class="c-nav-island" id="navIsland" aria-label="Open navigation menu">
       <div class="c-nav-island__icon">
         <svg class="c-nav-island__q-symbol" viewBox="0 0 100 100" fill="currentColor">
@@ -162,8 +178,15 @@
       </div>
       <div class="c-nav-island__label">MENU</div>
     </button>
+
     <div class="c-nav-menu" id="navMenu">
-      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      <button class="c-nav-menu__close" id="navClose" aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
       <nav class="c-nav-menu__content">
         <ul class="c-nav-menu__list">
           <li class="c-nav-menu__item"><a href="index.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">Home</span></a></li>
@@ -173,7 +196,11 @@
           <li class="c-nav-menu__item"><a href="fail-predict.html" class="c-nav-menu__link" data-nav-link><span class="c-nav-menu__link-text">FailPredict</span></a></li>
         </ul>
       </nav>
-      <div class="c-nav-menu__footer"><div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div><div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div></div>
+
+      <div class="c-nav-menu__footer">
+        <div><p>M0NARQ Industrial-AI.One</p><p>Chattogram, Bangladesh</p></div>
+        <div><a href="mailto:invest@monarq.ai">invest@monarq.ai</a></div>
+      </div>
     </div>
 
     <script src="assets/js/app.js"></script>
