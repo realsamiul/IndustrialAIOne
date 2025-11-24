@@ -715,7 +715,7 @@ class DynamicIslandNav {
         }, 600);
       }
       // For regular links, let Barba handle the transition
-      // The menu will be closed in Barba's leave hook
+      // The menu will stay open to act as a curtain
     });
   }
 
@@ -883,10 +883,7 @@ class DynamicIslandNav {
     
     // Reset state
     this.isOpen = false;
-    this.island = null;
-    this.menu = null;
-    this.closeBtn = null;
-    this.menuLinks = [];
+    // Don't null out references - keep them for singleton pattern
   }
 }
 
@@ -922,22 +919,27 @@ function initBarba() {
         console.log('Leaving page:', data.current.url.href);
         const done = this.async();
         
-        // Close menu if open
-        if (window.dynamicNavInstance && window.dynamicNavInstance.isOpen) {
-          window.dynamicNavInstance.close();
-          await new Promise(resolve => setTimeout(resolve, 400));
-        }
+        // Check if menu is currently covering the screen
+        const isMenuOpen = window.dynamicNavInstance && window.dynamicNavInstance.isOpen;
         
         document.body.classList.add('is-transitioning');
         
-        // Fade out current container
-        gsap.to(data.current.container, {
-          opacity: 0,
-          y: -30,
-          duration: 0.5,
-          ease: "power2.inOut",
-          onComplete: done
-        });
+        // LOGIC CHANGE: "Curtain" approach
+        // If menu is open, don't fade out - the old page stays visible behind the menu
+        // If menu is closed (normal link click), run the fade out animation
+        if (isMenuOpen) {
+          console.log('Menu is open - keeping old page visible behind curtain');
+          done(); 
+        } else {
+          // Normal fade out for standard navigation
+          gsap.to(data.current.container, {
+            opacity: 0,
+            y: -30,
+            duration: 0.5,
+            ease: "power2.inOut",
+            onComplete: done
+          });
+        }
       },
 
       async beforeEnter(data) {
@@ -957,18 +959,32 @@ function initBarba() {
           scrollContainer.style.opacity = '1';
         }
         
-        // Set initial state for animation
-        gsap.set(container, { 
-          opacity: 0,
-          y: 30
-        });
+        // Check if menu is open to determine initial state
+        const isMenuOpen = window.dynamicNavInstance && window.dynamicNavInstance.isOpen;
+        
+        if (isMenuOpen) {
+          // If menu is open, make container immediately visible (but hidden behind menu)
+          gsap.set(container, { 
+            opacity: 1,
+            y: 0
+          });
+        } else {
+          // Normal transition - prepare for fade in
+          gsap.set(container, { 
+            opacity: 0,
+            y: 30
+          });
+        }
       },
 
       async enter(data) {
         console.log('Entering page:', data.next.url.href);
         
-        // Destroy all existing instances properly
-        console.log('Cleaning up previous instances...');
+        const isMenuOpen = window.dynamicNavInstance && window.dynamicNavInstance.isOpen;
+        const container = data.next.container;
+        
+        // Destroy page-specific instances (but NOT dynamicNavInstance)
+        console.log('Cleaning up page-specific instances...');
         
         if (window.scrollInstance) {
           window.scrollInstance.destroy();
@@ -985,30 +1001,32 @@ function initBarba() {
           window.animationsInstance = null;
         }
         
-        if (window.dynamicNavInstance) {
-          window.dynamicNavInstance.destroy();
-          window.dynamicNavInstance = null;
-        }
+        // Note: We deliberately DON'T destroy dynamicNavInstance here
+        // It needs to persist to maintain menu state
         
         // Update body classes
-        document.body.classList.remove('is-transitioning', 'menu-active');
+        document.body.classList.remove('is-transitioning');
+        // Don't remove menu-active if menu is open
         
-        // Get the new container
-        const container = data.next.container;
-        
-        // Animate container in
-        await gsap.to(container, {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out"
-        });
+        // LOGIC CHANGE: Handle visibility based on menu state
+        if (isMenuOpen) {
+          // Page is already visible (set in beforeEnter), just sitting behind the menu
+          console.log('New page ready behind menu curtain');
+        } else {
+          // Normal fade in for standard navigation
+          await gsap.to(container, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        }
         
         // Small delay to ensure DOM is ready
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Re-initialize all modules
-        console.log('Re-initializing modules...');
+        // Re-initialize page-specific modules
+        console.log('Re-initializing page modules...');
         
         // Initialize scroll first
         const scroll = new Scroll();
@@ -1026,14 +1044,17 @@ function initBarba() {
         const animations = new Animations();
         animations.init();
         window.animationsInstance = animations;
-
-        const dynamicNav = new DynamicIslandNav();
-        dynamicNav.init();
-        window.dynamicNavInstance = dynamicNav;
+        
+        // LOGIC CHANGE: Close menu NOW to reveal the new page
+        // This creates the smooth "curtain reveal" effect
+        if (isMenuOpen && window.dynamicNavInstance) {
+          console.log('Closing menu to reveal new page');
+          window.dynamicNavInstance.close();
+        }
         
         // Animate hero title if present
         const heroTitle = container.querySelector('.c-hero__title');
-        if (heroTitle) {
+        if (heroTitle && !isMenuOpen) { // Only animate if not coming from menu
           scrambleText(heroTitle, 1.2);
         }
         
@@ -1087,24 +1108,34 @@ function initBarba() {
 async function initializeApp() {
   console.log('DOM Content Loaded - Initializing app');
   
-  // Add is-loading class immediately
-  document.documentElement.classList.add('is-loading');
+  // Check if this is first load or a Barba navigation
+  const isFirstLoad = !window.appInitialized;
+  window.appInitialized = true;
+  
+  // Add is-loading class only on first load
+  if (isFirstLoad) {
+    document.documentElement.classList.add('is-loading');
+  }
   
   try {
-    // Load dependencies
-    console.log('Loading dependencies...');
-    await loadScripts(deps);
-    console.log('Dependencies loaded successfully');
-    
-    // Verify GSAP is ready
-    if (typeof gsap === 'undefined') {
-      throw new Error('GSAP failed to load');
+    // Load dependencies only once
+    if (isFirstLoad) {
+      console.log('Loading dependencies...');
+      await loadScripts(deps);
+      console.log('Dependencies loaded successfully');
+      
+      // Verify GSAP is ready
+      if (typeof gsap === 'undefined') {
+        throw new Error('GSAP failed to load');
+      }
     }
     
-    // Initialize preloader
-    console.log('Initializing preloader...');
-    const preloader = new Preloader();
-    await preloader.init();
+    // Initialize preloader only on first load
+    if (isFirstLoad) {
+      console.log('Initializing preloader...');
+      const preloader = new Preloader();
+      await preloader.init();
+    }
     
     // Initialize smooth scroll
     console.log('Initializing smooth scroll...');
@@ -1127,15 +1158,22 @@ async function initializeApp() {
     animations.init();
     window.animationsInstance = animations;
     
-    // Initialize Dynamic Island Navigation
-    console.log('Initializing Dynamic Island Navigation...');
-    const dynamicNav = new DynamicIslandNav();
-    dynamicNav.init();
-    window.dynamicNavInstance = dynamicNav;
+    // SINGLETON PATTERN: Only initialize DynamicNav once
+    // This allows the menu state to persist across page transitions
+    if (!window.dynamicNavInstance) {
+      console.log('Initializing Dynamic Island Navigation...');
+      const dynamicNav = new DynamicIslandNav();
+      dynamicNav.init();
+      window.dynamicNavInstance = dynamicNav;
+    } else {
+      console.log('Dynamic Island Navigation already initialized - maintaining state');
+    }
     
-    // Initialize Barba for page transitions
-    console.log('Initializing page transitions...');
-    initBarba();
+    // Initialize Barba only once
+    if (isFirstLoad) {
+      console.log('Initializing page transitions...');
+      initBarba();
+    }
     
     console.log('App initialization complete');
     
